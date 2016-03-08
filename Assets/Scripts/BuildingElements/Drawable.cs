@@ -28,6 +28,14 @@ namespace Building
 
         }
 
+        public void AddUVs(Vector2 point)
+        {
+            this.uvs.Add(point);
+            this.uvs.Add(new Vector2(point.x, point.y + 0.25f));
+            this.uvs.Add(new Vector2(point.x + 0.25f, point.y + 0.25f));
+            this.uvs.Add(new Vector2(point.x + 0.25f, point.y));
+        }
+
         public void Draw()
         {
             this.meshFilter = GetComponent<MeshFilter>();
@@ -41,6 +49,7 @@ namespace Building
 
             mesh.Optimize();
             mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
 
             if(material==null) material = new Material(Shader.Find("Diffuse"));
             renderer.material = material;

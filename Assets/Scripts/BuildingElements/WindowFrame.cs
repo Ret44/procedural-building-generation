@@ -12,6 +12,7 @@ namespace Building
         {
             this.vertices = new List<Vector3>();
             this.tris = new List<int>();
+            this.uvs = new List<Vector2>();
         }
 
         public void AddFrame(Rect points)
@@ -22,6 +23,8 @@ namespace Building
             this.vertices.Add(points.B);
             this.vertices.Add(points.B + new Vector3(0f,0f,windowFrameSize));
             this.vertices.Add(points.A + new Vector3(0f, 0f, windowFrameSize));
+
+            this.AddUVs(new Vector2(0.25f,0.75f));
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
@@ -37,6 +40,8 @@ namespace Building
             this.vertices.Add(points.C + new Vector3(0f, 0f, windowFrameSize));
             this.vertices.Add(points.B + new Vector3(0f, 0f, windowFrameSize));
 
+            this.AddUVs(new Vector2(0.25f, 0.75f));
+
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
             this.tris.Add(vertOffset + 2);
@@ -50,6 +55,8 @@ namespace Building
             this.vertices.Add(points.D);
             this.vertices.Add(points.D + new Vector3(0f, 0f, windowFrameSize));
             this.vertices.Add(points.C + new Vector3(0f, 0f, windowFrameSize));
+
+            this.AddUVs(new Vector2(0.25f, 0.75f));
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
@@ -65,6 +72,8 @@ namespace Building
             this.vertices.Add(points.A + new Vector3(0f, 0f, windowFrameSize));
             this.vertices.Add(points.D + new Vector3(0f, 0f, windowFrameSize));
 
+            this.AddUVs(new Vector2(0.25f, 0.75f));
+
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
             this.tris.Add(vertOffset + 2);
@@ -77,8 +86,8 @@ namespace Building
 
         public void Draw()
         {
-            this.material = new Material(Shader.Find("Diffuse"));
-            this.material.color = Color.yellow;
+           // this.material = new Material(Shader.Find("Diffuse"));
+           // this.material.color = Color.yellow;
 
 
             base.Draw();

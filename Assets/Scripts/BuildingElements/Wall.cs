@@ -17,9 +17,7 @@ namespace Building
         public Vector3 startingPoint;
         public Vector3 directionPoint;
 
-        public Vector4 bigPanelTextureUV = new Vector4(0, 0, 117, 219);
-        public Vector4 smallPanelTextureUV = new Vector4(117, 0, 102, 60);
-           
+                  
         public void MirrorTris()
         {
             List<int> newTris = new List<int>();
@@ -72,7 +70,6 @@ namespace Building
         {
             this.vertices = new List<Vector3>();
             this.tris = new List<int>();
-
             this.uvs = new List<Vector2>();
 
             int floorCount = Mathf.FloorToInt(wallSize.y / (windowSize.y * 2));
@@ -94,6 +91,7 @@ namespace Building
             window.transform.localPosition = Vector3.zero;
             Window windows = window.AddComponent<Window>();
             windows.windowFrameSize = this.windowFrameSize;
+            windows.material = this.material;
             windows.Init();
 
             // Frames
@@ -103,6 +101,7 @@ namespace Building
             frame.transform.localPosition = Vector3.zero;
             WindowFrame frames = frame.AddComponent<WindowFrame>();
             frames.windowFrameSize = this.windowFrameSize;
+            frames.material = this.material;
             frames.Init();
             
             // Doors
@@ -112,6 +111,7 @@ namespace Building
             door.transform.localPosition = Vector3.zero;
             Door doors = door.AddComponent<Door>();
             doors.frameSize = this.windowFrameSize;
+            doors.material = this.material;
             doors.Init();
 
             Vector2 offset = new Vector2(0, 0);
@@ -132,10 +132,10 @@ namespace Building
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + foundationHeight, startingPoint.z));
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y, startingPoint.z));
 
-                        this.uvs.Add(new Vector2(bigPanelTextureUV.x, bigPanelTextureUV.y + bigPanelTextureUV.w));
-                        this.uvs.Add(new Vector2(bigPanelTextureUV.x, bigPanelTextureUV.y));
-                        this.uvs.Add(new Vector2(bigPanelTextureUV.x + bigPanelTextureUV.z, bigPanelTextureUV.y));
-                        this.uvs.Add(new Vector2(bigPanelTextureUV.x + bigPanelTextureUV.z, bigPanelTextureUV.y + bigPanelTextureUV.w));
+                        this.uvs.Add(new Vector2(0f, 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
+                        this.uvs.Add(new Vector2(0f, 1f));
+                        this.uvs.Add(new Vector2(0.25f, 1f));
+                        this.uvs.Add(new Vector2(0.25f, 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
 
                         this.tris.Add(vertOffset);
                         this.tris.Add(vertOffset + 1);
@@ -156,10 +156,10 @@ namespace Building
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y + foundationHeight, startingPoint.z));
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y, startingPoint.z));
 
-                        this.uvs.Add(new Vector2(bigPanelTextureUV.x, bigPanelTextureUV.y + bigPanelTextureUV.w));
-                        this.uvs.Add(new Vector2(bigPanelTextureUV.x, bigPanelTextureUV.y));
-                        this.uvs.Add(new Vector2(bigPanelTextureUV.x + bigPanelTextureUV.z, bigPanelTextureUV.y));
-                        this.uvs.Add(new Vector2(bigPanelTextureUV.x + bigPanelTextureUV.z, bigPanelTextureUV.y + bigPanelTextureUV.w));
+                        this.uvs.Add(new Vector2(0f, 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
+                        this.uvs.Add(new Vector2(0f, 1f));
+                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
+                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
 
                         this.tris.Add(vertOffset);
                         this.tris.Add(vertOffset + 1);
@@ -179,10 +179,10 @@ namespace Building
                 this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y + foundationHeight, startingPoint.z));
                 this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y, startingPoint.z));
 
-                this.uvs.Add(new Vector2(bigPanelTextureUV.x, bigPanelTextureUV.y + bigPanelTextureUV.w));
-                this.uvs.Add(new Vector2(bigPanelTextureUV.x, bigPanelTextureUV.y));
-                this.uvs.Add(new Vector2(bigPanelTextureUV.x + bigPanelTextureUV.z, bigPanelTextureUV.y));
-                this.uvs.Add(new Vector2(bigPanelTextureUV.x + bigPanelTextureUV.z, bigPanelTextureUV.y + bigPanelTextureUV.w));
+                this.uvs.Add(new Vector2(0f, 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
+                this.uvs.Add(new Vector2(0f, 1f));
+                this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
+                this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
 
                 this.tris.Add(vertOffset);
                 this.tris.Add(vertOffset + 1);
@@ -207,10 +207,10 @@ namespace Building
                     this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y + floorHeight, startingPoint.z));
                     this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y, startingPoint.z));
 
-                    this.uvs.Add(new Vector2(bigPanelTextureUV.x, bigPanelTextureUV.y+bigPanelTextureUV.w));
-                    this.uvs.Add(new Vector2(bigPanelTextureUV.x, bigPanelTextureUV.y));
-                    this.uvs.Add(new Vector2(bigPanelTextureUV.x+bigPanelTextureUV.z, bigPanelTextureUV.y));
-                    this.uvs.Add(new Vector2(bigPanelTextureUV.x + bigPanelTextureUV.z, bigPanelTextureUV.y + bigPanelTextureUV.w));
+                    this.uvs.Add(new Vector2(0f, 0.75f));
+                    this.uvs.Add(new Vector2(0f, 1f));
+                    this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
+                    this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f));
 
                     this.tris.Add(vertOffset);
                     this.tris.Add(vertOffset + 1);
@@ -229,10 +229,10 @@ namespace Building
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + smallPanelHeight, startingPoint.z));
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y, startingPoint.z));
 
-                        this.uvs.Add(new Vector2(smallPanelTextureUV.x, smallPanelTextureUV.y + smallPanelTextureUV.w));
-                        this.uvs.Add(new Vector2(smallPanelTextureUV.x, smallPanelTextureUV.y));
-                        this.uvs.Add(new Vector2(smallPanelTextureUV.x + smallPanelTextureUV.z, smallPanelTextureUV.y));
-                        this.uvs.Add(new Vector2(smallPanelTextureUV.x + smallPanelTextureUV.z, smallPanelTextureUV.y + smallPanelTextureUV.w));
+                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + ((floorHeight - smallPanelHeight) / floorHeight * 0.25f)));
+                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
+                        this.uvs.Add(new Vector2(0.25f, 1f));
+                        this.uvs.Add(new Vector2(0.25f, 0.75f + ((floorHeight - smallPanelHeight) / floorHeight * 0.25f)));
 
                         this.tris.Add(vertOffset);
                         this.tris.Add(vertOffset + 1);
@@ -248,10 +248,10 @@ namespace Building
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + floorHeight, startingPoint.z));
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + floorHeight - smallPanelHeight, startingPoint.z));
 
-                        this.uvs.Add(new Vector2(smallPanelTextureUV.x, smallPanelTextureUV.y + smallPanelTextureUV.w));
-                        this.uvs.Add(new Vector2(smallPanelTextureUV.x, smallPanelTextureUV.y));
-                        this.uvs.Add(new Vector2(smallPanelTextureUV.x + smallPanelTextureUV.z, smallPanelTextureUV.y));
-                        this.uvs.Add(new Vector2(smallPanelTextureUV.x + smallPanelTextureUV.z, smallPanelTextureUV.y + smallPanelTextureUV.w));
+                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f));
+                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + (smallPanelHeight / floorHeight  * 0.25f)));
+                        this.uvs.Add(new Vector2(0.25f, 0.75f + (smallPanelHeight / floorHeight * 0.25f)));
+                        this.uvs.Add(new Vector2(0.25f, 0.75f));
 
                         this.tris.Add(vertOffset);
                         this.tris.Add(vertOffset + 1);
@@ -284,11 +284,11 @@ namespace Building
                             this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + floorHeight, startingPoint.z));
                             this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + floorHeight - smallPanelHeight - foundationHeight, startingPoint.z));
 
-                            this.uvs.Add(new Vector2(smallPanelTextureUV.x, smallPanelTextureUV.y + smallPanelTextureUV.w));
-                            this.uvs.Add(new Vector2(smallPanelTextureUV.x, smallPanelTextureUV.y));
-                            this.uvs.Add(new Vector2(smallPanelTextureUV.x + smallPanelTextureUV.z, smallPanelTextureUV.y));
-                            this.uvs.Add(new Vector2(smallPanelTextureUV.x + smallPanelTextureUV.z, smallPanelTextureUV.y + smallPanelTextureUV.w));
-
+                            this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + ((floorHeight - smallPanelHeight - foundationHeight) / floorHeight * 0.25f)));
+                            this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
+                            this.uvs.Add(new Vector2(0.25f, 1f));
+                            this.uvs.Add(new Vector2(0.25f, 0.75f + ((floorHeight - smallPanelHeight - foundationHeight) / floorHeight * 0.25f)));
+                            
                             this.tris.Add(vertOffset);
                             this.tris.Add(vertOffset + 1);
                             this.tris.Add(vertOffset + 2);
@@ -313,10 +313,10 @@ namespace Building
                             this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + floorHeight, startingPoint.z));
                             this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + biasedWindow.y, startingPoint.z));
 
-                            this.uvs.Add(new Vector2(smallPanelTextureUV.x, smallPanelTextureUV.y + smallPanelTextureUV.w));
-                            this.uvs.Add(new Vector2(smallPanelTextureUV.x, smallPanelTextureUV.y));
-                            this.uvs.Add(new Vector2(smallPanelTextureUV.x + smallPanelTextureUV.z, smallPanelTextureUV.y));
-                            this.uvs.Add(new Vector2(smallPanelTextureUV.x + smallPanelTextureUV.z, smallPanelTextureUV.y + smallPanelTextureUV.w));
+                            this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + ((biasedWindow.y) / floorHeight * 0.25f)));
+                            this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
+                            this.uvs.Add(new Vector2(0.25f, 1f));
+                            this.uvs.Add(new Vector2(0.25f, 0.75f + ((biasedWindow.y) / floorHeight * 0.25f)));
 
                             this.tris.Add(vertOffset);
                             this.tris.Add(vertOffset + 1);
@@ -332,7 +332,7 @@ namespace Building
                                                          new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + biasedWindow.y, startingPoint.z),
                                                          new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y, startingPoint.z));
 
-                            windows.AddWindow(singleWindow);
+                            windows.AddWindow(singleWindow,1);
                             frames.AddFrame(singleWindow);
                         }
                     }
@@ -345,10 +345,10 @@ namespace Building
                 this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y + floorHeight, startingPoint.z));
                 this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y, startingPoint.z));
 
-                this.uvs.Add(new Vector2(bigPanelTextureUV.x, bigPanelTextureUV.y + bigPanelTextureUV.w));
-                this.uvs.Add(new Vector2(bigPanelTextureUV.x, bigPanelTextureUV.y));
-                this.uvs.Add(new Vector2(bigPanelTextureUV.x + bigPanelTextureUV.z, bigPanelTextureUV.y));
-                this.uvs.Add(new Vector2(bigPanelTextureUV.x + bigPanelTextureUV.z, bigPanelTextureUV.y + bigPanelTextureUV.w));
+                this.uvs.Add(new Vector2(0f, 0.75f));
+                this.uvs.Add(new Vector2(0f, 1f));
+                this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
+                this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f));
 
                 this.tris.Add(vertOffset);
                 this.tris.Add(vertOffset + 1);
@@ -360,8 +360,8 @@ namespace Building
                 vertOffset += 4;
             }
 
-            this.material = new Material(Shader.Find("Diffuse"));
-            this.material.color = Color.grey;
+           // this.material = new Material(Shader.Find("Diffuse"));
+           // this.material.color = Color.grey;
 
             doors.Draw();
             windows.Draw();

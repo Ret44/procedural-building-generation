@@ -12,6 +12,7 @@ namespace Building
         {
             this.vertices = new List<Vector3>();
             this.tris = new List<int>();
+            this.uvs = new List<Vector2>();
         }
 
         public void AddBalcony(Rect points)
@@ -23,6 +24,8 @@ namespace Building
             this.vertices.Add(new Vector3(points.A.x, points.A.y, points.A.z));
             this.vertices.Add(new Vector3(points.D.x, points.D.y, points.D.z));
             this.vertices.Add(new Vector3(points.D.x, points.D.y, points.D.z - balconyLength));
+
+            this.AddUVs(new Vector2(0.25f,0.75f));
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
@@ -48,6 +51,8 @@ namespace Building
             this.vertices.Add(new Vector3(points.C.x, points.C.y, points.C.z - balconyLength));
             this.vertices.Add(new Vector3(points.D.x, points.D.y, points.D.z - balconyLength));
 
+            this.AddUVs(new Vector2(0f, 0f));
+
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
             this.tris.Add(vertOffset + 2);
@@ -71,6 +76,8 @@ namespace Building
             this.vertices.Add(new Vector3(points.B.x, points.B.y, points.B.z - balconyLength));
             this.vertices.Add(new Vector3(points.B.x, points.B.y, points.B.z));
             this.vertices.Add(new Vector3(points.A.x, points.A.y, points.A.z));
+
+            this.AddUVs(new Vector2(0f, 0f));
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
@@ -96,6 +103,8 @@ namespace Building
             this.vertices.Add(new Vector3(points.C.x, points.C.y, points.C.z));
             this.vertices.Add(new Vector3(points.D.x, points.D.y, points.D.z));
 
+            this.AddUVs(new Vector2(0f, 0f));
+
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
             this.tris.Add(vertOffset + 2);
@@ -117,8 +126,8 @@ namespace Building
         {
 
 
-            this.material = new Material(Shader.Find("Diffuse"));
-            this.material.color = Color.green;
+          //  this.material = new Material(Shader.Find("Diffuse"));
+          //  this.material.color = Color.green;
 
             base.Draw();
         }

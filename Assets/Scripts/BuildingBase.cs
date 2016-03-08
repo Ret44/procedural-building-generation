@@ -146,6 +146,7 @@ public class BuildingBase : MonoBehaviour
         bWallComponent.windowFrameSize = this.windowFrameSize;
         bWallComponent.foundationHeight = this.foundationHeight;
         bWallComponent.balconyLength = this.balconyLength;
+        bWallComponent.material = this.buildingMaterial;
         bWallComponent.Draw();
 
         wallS.transform.Rotate(new Vector3(0f, 180f, 0f));

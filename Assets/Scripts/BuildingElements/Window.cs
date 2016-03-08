@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Building
 {
+
     public class Window : Drawable
     {
         public Vector3 PointA;
@@ -16,9 +17,10 @@ namespace Building
         {
             this.vertices = new List<Vector3>();
             this.tris = new List<int>();
+            this.uvs = new List<Vector2>();
         }
 
-        public void AddWindow(Rect points)
+        public void AddWindow(Rect points, int wType = 0)
         {
             int vertOffset = this.vertices.Count;
             this.vertices.Add(points.A + new Vector3(0f,0f, windowFrameSize));
@@ -26,6 +28,10 @@ namespace Building
             this.vertices.Add(points.C + new Vector3(0f, 0f, windowFrameSize));
             this.vertices.Add(points.D + new Vector3(0f, 0f, windowFrameSize));
 
+            float uvOffset = (float)wType / 4;
+
+            this.AddUVs(new Vector2(uvOffset, 0.5f));
+             
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
             this.tris.Add(vertOffset + 2);
@@ -38,8 +44,8 @@ namespace Building
         public void Draw()
         {           
            
-            this.material = new Material(Shader.Find("Diffuse"));
-            this.material.color = Color.blue;
+          //  this.material = new Material(Shader.Find("Diffuse"));
+         //   this.material.color = Color.blue;
 
             base.Draw();
         }

@@ -202,12 +202,26 @@ public class BuildingBase : MonoBehaviour
         roof.transform.parent = this.transform;
         roof.name = "Generated Roof";
         roof.transform.localPosition = Vector3.zero;
-        panelComponent = roof.AddComponent<Panel>();
-        panelComponent.PointA = this.PointD + new Vector3(0f, height, 0f);
-        panelComponent.PointB = PointC + new Vector3(0f, height, 0f);
-        panelComponent.PointC = PointB + new Vector3(0f, height, 0f);
-        panelComponent.PointD = this.PointA + new Vector3(0f, height, 0f);
-        panelComponent.Draw();
+        Roof roofComponent = roof.AddComponent<Roof>();
+        roofComponent.depth = this.depth;
+        roofComponent.height = this.height;
+        roofComponent.wallSize = new Vector2(Vector3.Distance(this.PointA, this.PointB), this.height - this.foundationHeight);
+        roofComponent.windowSize = this.windowSize;
+        roofComponent.windowOffset = this.windowOffset;
+        roofComponent.windowFrameSize = this.windowFrameSize;
+        roofComponent.material = this.buildingMaterial;
+        roofComponent.Draw();
+
+        //GameObject roof = new GameObject();
+        //    roof.transform.parent = this.transform;
+        //    roof.name = "Generated Roof";
+        //    roof.transform.localPosition = Vector3.zero;
+        //    panelComponent = roof.AddComponent<Panel>();
+        //    panelComponent.PointA = this.PointD + new Vector3(0f, height, 0f);
+        //    panelComponent.PointB = PointC + new Vector3(0f, height, 0f);
+        //    panelComponent.PointC = PointB + new Vector3(0f, height, 0f);
+        //    panelComponent.PointD = this.PointA + new Vector3(0f, height, 0f);
+        //    panelComponent.Draw();
 
         //  CombineMeshes(objects);
 

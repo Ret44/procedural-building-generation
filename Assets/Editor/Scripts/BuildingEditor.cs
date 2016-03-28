@@ -47,7 +47,7 @@ public class BuildingEditor : Editor {
             {
                 case EditorMode.Chunk:
                     EditorGUI.BeginChangeCheck();
-                    upFace = Handles.ScaleSlider(script.height, script.transform.position, Vector3.up, Quaternion.identity, 2, 0.15f);
+                    upFace = Handles.ScaleSlider(script.height, script.transform.position, Vector3.up, Quaternion.identity, 20, 0.15f);
                     if (EditorGUI.EndChangeCheck())
                     {
                         Undo.RecordObject(target, "Gizmo Size");
@@ -56,7 +56,7 @@ public class BuildingEditor : Editor {
                         script.DrawBuilding();
                     }
                     EditorGUI.BeginChangeCheck();
-                    leftFace = Handles.ScaleSlider(script.width, script.transform.position, Vector3.right, Quaternion.identity, 2, 0.15f);
+                    leftFace = Handles.ScaleSlider(script.width, script.transform.position, Vector3.right, Quaternion.identity, 20, 0.15f);
                     if (EditorGUI.EndChangeCheck())
                     {
                         Undo.RecordObject(target, "Gizmo Size");
@@ -65,7 +65,7 @@ public class BuildingEditor : Editor {
                         script.DrawBuilding();
                     }
                     EditorGUI.BeginChangeCheck();
-                    forwardFace = Handles.ScaleSlider(script.depth, script.transform.position, Vector3.forward, Quaternion.identity, 2, 0.15f);
+                    forwardFace = Handles.ScaleSlider(script.depth, script.transform.position, Vector3.forward, Quaternion.identity, 20, 0.15f);
                     if (EditorGUI.EndChangeCheck())
                     {
                         Undo.RecordObject(target, "Gizmo Size");
@@ -76,7 +76,7 @@ public class BuildingEditor : Editor {
                     break;
                 case EditorMode.Window:
                     EditorGUI.BeginChangeCheck();
-                    forwardFace = Handles.ScaleSlider(script.windowFrameSize, script.transform.position, Vector3.forward, Quaternion.identity, 2, 0.15f);
+                    forwardFace = Handles.ScaleSlider(script.windowFrameSize, script.transform.position, Vector3.forward, Quaternion.identity, 20, 0.15f);
                     if (EditorGUI.EndChangeCheck())
                     {
                         Undo.RecordObject(target, "Gizmo Size");
@@ -86,7 +86,7 @@ public class BuildingEditor : Editor {
                     }
                   
                     EditorGUI.BeginChangeCheck();
-                    leftFace = Handles.ScaleSlider(script.windowOffset, script.transform.position, Vector3.right, Quaternion.identity, 2, 0.15f);
+                    leftFace = Handles.ScaleSlider(script.windowOffset, script.transform.position, Vector3.right, Quaternion.identity, 20, 0.15f);
                     if (EditorGUI.EndChangeCheck())
                     {
                         Undo.RecordObject(target, "Gizmo Size");
@@ -97,7 +97,7 @@ public class BuildingEditor : Editor {
                     break;
                 case EditorMode.Foundation:
                     EditorGUI.BeginChangeCheck();
-                    upFace = Handles.ScaleSlider(script.foundationHeight, script.transform.position, Vector3.up, Quaternion.identity, 2, 0.15f);
+                    upFace = Handles.ScaleSlider(script.foundationHeight, script.transform.position, Vector3.up, Quaternion.identity, 20, 0.15f);
                     if (EditorGUI.EndChangeCheck())
                     {
                         Undo.RecordObject(target, "Gizmo Size");
@@ -108,7 +108,7 @@ public class BuildingEditor : Editor {
                     break;
                 case EditorMode.Balcony:
                     EditorGUI.BeginChangeCheck();
-                    forwardFace = Handles.ScaleSlider(script.balconyLength, script.transform.position, Vector3.forward, Quaternion.identity, 2, 0.15f);
+                    forwardFace = Handles.ScaleSlider(script.balconyLength, script.transform.position, Vector3.forward, Quaternion.identity, 20, 0.15f);
                     if (EditorGUI.EndChangeCheck())
                     {
                         Undo.RecordObject(target, "Gizmo Size");

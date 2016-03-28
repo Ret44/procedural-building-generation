@@ -18,16 +18,6 @@ namespace Building
 
         public MeshRenderer renderer;
 
-        void Awake()
-        {
-            
-        }
-
-        public void AddRect(Rect points)
-        {
-
-        }
-
         public void AddUVs(Vector2 point)
         {
             this.uvs.Add(point);
@@ -58,16 +48,5 @@ namespace Building
             
         }
 
-        // use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
     }
 }

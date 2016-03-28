@@ -47,7 +47,7 @@ public class BuildingBase : MonoBehaviour
         PointD = new Vector3(0f, 0f, depth);
     }
 
-    void OnDrawGizmosSelected()
+    void OnDrawGizmos()
     {
         if (DrawGizmos)
         {

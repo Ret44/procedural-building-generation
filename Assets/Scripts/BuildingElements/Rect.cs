@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace Building
 {
+    [System.Serializable]
     public class Rect
     {
         public Vector3 A;

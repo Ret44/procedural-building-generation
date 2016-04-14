@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace OldSettlement
+namespace Settlement
 {
     public enum DrawAnchorsMode
     {
@@ -113,7 +113,7 @@ namespace OldSettlement
 
             rectSize = new Vector2(borders.z - borders.x, borders.w - borders.y);
 
-            blockCount = new Vector2(Mathf.Floor(rectSize.x / blockSize.x), Mathf.Floor(rectSize.y / blockSize.y));
+            blockCount = new Vector2(Mathf.Ceil(rectSize.x / blockSize.x), Mathf.Ceil(rectSize.y / blockSize.y));
 
            
             //Vector2 blockOffset = Vector2.zero;
@@ -151,20 +151,20 @@ namespace OldSettlement
             Gizmos.DrawLine(this.transform.position + new Vector3(borders.z, 0f, borders.w), this.transform.position + new Vector3(borders.z, 0f, borders.y));
             Gizmos.DrawLine(this.transform.position + new Vector3(borders.z, 0f, borders.y), this.transform.position + new Vector3(borders.x, 0f, borders.y));
 
-            float offset = borders.x + (rectSize.x % blockSize.x)/2;
+            float offset = borders.x;// + (rectSize.x % blockSize.x)/2;
 
             //tempBlockSize.x = Mathf.Floor(rectSize.x / blockSize.x) + (rectSize.x % blockSize.x);
-      //      tempBlockSize.y = Mathf.Floor(rectSize.y / blockSize.y) + (rectSize.y % ;
-          
+            //      tempBlockSize.y = Mathf.Floor(rectSize.y / blockSize.y) + (rectSize.y % ;
+
             //Debug.Log(Mathf.Floor(rectSize.x / blockSize.x) + " " + Mathf.Floor(rectSize.y / blockSize.y));
 
             while (offset <= borders.z)
             {
-                Gizmos.DrawLine(this.transform.position + new Vector3(offset, 0f, borders.y), this.transform.position + new Vector3(offset, 0f, borders.w));
+                Gizmos.DrawLine(this.transform.position + new Vector3(offset, 0f, borders.y), this.transform.position + new Vector3(offset, 0f, borders.w));                
                 offset += blockSize.x;
             }
 
-            offset = borders.y + (rectSize.y % blockSize.y) / 2;
+            offset = borders.y;// + (rectSize.y % blockSize.y) / 2;
             while (offset <= borders.w)
             {
                 Gizmos.DrawLine(this.transform.position + new Vector3(borders.x, 0f, offset), this.transform.position + new Vector3(borders.z, 0f, offset));
@@ -283,27 +283,210 @@ namespace OldSettlement
             Debug.Log(debug);
         }
 
+
+        public int CoordX (float x)
+        {
+            return (int)((x - borders.x) / blockSize.x);
+        }
+
+        public int CoordY (float y)
+        {
+            return (int)((y - borders.y) / blockSize.y);
+        }
+
+        public Vector2 WorldToArrayCoord(Vector2 coord)
+        {
+            return new Vector2(CoordX(coord.x), CoordY(coord.y));
+        }
+
+        public Vector2 ArrayToWorldCoord(Vector2 coord)
+        {
+            return new Vector2(borders.x + (blockSize.x * coord.x), borders.y + (blockSize.y * coord.y));
+        }
+
+        public void DrawLineBresenham(Line line) // Bresenham's line algorithm implementation
+        {
+            bool steep = Mathf.Abs(line.B.y - line.A.y) > Mathf.Abs(line.B.x - line.A.x);
+            if (steep)
+            {
+                line.A = new Vector2(line.A.y, line.A.x);
+                line.B = new Vector2(line.B.y, line.B.x);
+            }
+
+            if (line.A.x > line.B.x)
+            {
+                Vector2 tmp = line.A;
+                line.A = line.B;
+                line.B = line.A;
+            }
+
+            // Bresenham's line algorithm
+            //const bool steep = (fabs(y2 - y1) > fabs(x2 - x1));
+            //if (steep)
+            //{
+            //    std::swap(x1, y1);
+            //    std::swap(x2, y2);
+            //}
+
+            //if (x1 > x2)
+            //{
+            //    std::swap(x1, x2);
+            //    std::swap(y1, y2);
+            //}
+
+
+            float dx = line.B.x - line.A.x;
+            float dy = Mathf.Abs(line.B.y - line.A.y);
+            float error = dx / 2.0f;
+            int yStep = (line.A.y < line.B.y) ? 1 : -1;
+            int y = (int)line.A.y;
+            int maxX = (int)line.B.x;
+
+            //const float dx = x2 - x1;
+            //const float dy = fabs(y2 - y1);
+
+            //float error = dx / 2.0f;
+            //const int ystep = (y1 < y2) ? 1 : -1;
+            //int y = (int)y1;
+
+            //const int maxX = (int)x2;
+            int Xp, Yp;
+            for(int x = (int)line.A.x; x < maxX; x++)
+            {
+                if(steep)
+                {
+                    if(y<blockCount.x && x < blockCount.y)
+                    blockMap[y, x] = 1;
+                }
+                else
+                {
+                    if (x < blockCount.x && y < blockCount.y)
+                    blockMap[x, y] = 1;
+                }
+
+                error -= dy;
+                if(error < 0)
+                {
+                    y += yStep;
+                    error += dx;
+                }
+            }
+
+            //for (int x = (int)x1; x < maxX; x++)
+            //{
+            //    if (steep)
+            //    {
+            //        SetPixel(y, x, color);
+            //    }
+            //    else
+            //    {
+            //        SetPixel(x, y, color);
+            //    }
+
+            //    error -= dy;
+            //    if (error < 0)
+            //    {
+            //        y += ystep;
+            //        error += dx;
+            //    }
+            //}
+        }
+
+
+
+        public float GetY(Line line, float x)
+        {
+            float y = x * ((line.A.y - line.B.y) / (line.A.x - line.B.x)) + (line.A.y - (line.A.x * ((line.A.y - line.B.y) / (line.A.x - line.B.x))));
+            return y;
+        }
+
+        public void DrawLine(Line line) // Custom algorithm
+        {
+            Vector2 arrayPoint;
+            //if (line.A.x < line.B.x)
+            {
+                float offsetX = line.A.x;
+                float offsetY;
+                while (line.A.x < line.B.x ? (offsetX < line.B.x) : (offsetX > line.B.x))
+                {
+                    offsetY = GetY(line, offsetX);
+                    arrayPoint = WorldToArrayCoord(new Vector2(offsetX, offsetY));
+                    blockMap[(int)arrayPoint.x, (int)arrayPoint.y] = 1;
+                    offsetX += (line.A.x < line.B.x ? 1 : -1) * blockSize.x / 4;
+                }
+            }
+        }
+                        
         public void GenerateSettlement()
         {
             Debug.Log("Step 1: Determining block position");
 
-            blockMap = new int[Mathf.FloorToInt(blockCount.x), Mathf.FloorToInt(blockCount.y)];
+            blockMap = new int[Mathf.CeilToInt(blockCount.x), Mathf.CeilToInt(blockCount.y)];
             for (int j = 0; j < blockCount.y; j++)
             {
                 for (int i = 0; i < blockCount.x; i++)
                 {
 
-                    blockMap[i, j] = CheckRect(i, j);
+                    blockMap[i, j] = 0;
                 }
             }
 
-            DebugWriteTable(blockMap, (int)blockCount.x, (int)blockCount.y); //TODO: Delete this
+            for(int i = 0; i < Anchors.Count-1; i++)
+            {
+                DrawLine(new Line(Anchors[i], Anchors[i + 1]));                                  
+            }
 
-            //Line AB = new Line(new Vector2(2, 2), new Vector2(4, 2));
-            //Line PQ = new Line(new Vector2(2, 1), new Vector2(4, 3));
+            DrawLine(new Line(Anchors[Anchors.Count-1], Anchors[0]));
 
-            //Debug.Log(AB.intersectX(PQ));
-        }
+            //List<int> pool = new List<int>();
+            //int prev, next;
+            //bool fill = false;
+
+            //for (int j = 0; j < blockCount.y; j++)
+            //{
+            //    pool.Clear();
+            //    prev = 0;
+            //    for (int i = 0; i < blockCount.x; i++)
+            //    {
+            //        if (fill) pool.Add(i);
+
+            //        if (i+1 < blockCount.x) next = blockMap[i + 1, j];
+            //        else next = 0;
+            //        if (blockMap[i, j] == 1 && next == 0)
+            //        {
+            //            if (fill)
+            //            {
+            //                fill = false;
+            //                for (int it = 0; it < pool.Count; it++) blockMap[it, j] = 2;
+            //                pool.Clear();
+            //            }
+            //            else fill = true;
+            //        }                
+                                       
+            //    }                
+            //}
+                    //int mark, previousVal = 0, nextVal;
+                    //for(int j = 0; j < blockCount.y; j++)
+                    //{
+                    //    mark = 0;
+                    //    for (int i = 0; i < blockCount.x; i++)
+                    //    {
+                    //        if(i< blockCount.x) nextVal = i
+                    //        tmp = blockMap[i, j];
+                    //        if (blockMap[i, j] == 1 && previousVal == 0 && mark == 0) mark = 2;
+                    //        else if (blockMap[i, j] == 1 && previousVal == 0 &&  mark == 2) mark = 0;
+                    //        else blockMap[i, j] = mark;
+                    //        previousVal = tmp;
+                    //    }
+                    //}
+
+                    //DebugWriteTable(blockMap, (int)blockCount.x, (int)blockCount.y); //TODO: Delete this
+
+                    //Line AB = new Line(new Vector2(2, 2), new Vector2(4, 2));
+                    //Line PQ = new Line(new Vector2(2, 1), new Vector2(4, 3));
+
+                    //Debug.Log(AB.intersectX(PQ));
+                }
 
 
 

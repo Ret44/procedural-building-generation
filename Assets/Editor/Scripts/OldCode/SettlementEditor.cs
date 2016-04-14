@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections;
 
-namespace OldSettlement
+namespace Settlement
 {
 
 
@@ -39,25 +39,25 @@ namespace OldSettlement
                 }
             }
 
-            //if (script.blockMap.GetLength(0) != 0 && script.blockMap.GetLength(1) != 0)
-            //{
-            //    float offsetX = script.borders.x + (script.rectSize.x % script.blockSize.x) / 2;
-            //    float offsetY = script.borders.y + (script.rectSize.y % script.blockSize.y) / 2;
+            if (script.blockMap.GetLength(0) != 0 && script.blockMap.GetLength(1) != 0)
+            {
+                float offsetX = script.borders.x + (script.rectSize.x % script.blockSize.x) / 2;
+                float offsetY = script.borders.y + (script.rectSize.y % script.blockSize.y) / 2;
 
-            //    for (int j = 0; j < script.blockCount.y; j++)
-            //    {
-            //        for (int i = 0; i < script.blockCount.x; i++)
-            //        {
-            //            Handles.Label(script.transform.position + new Vector3(offsetX + (script.blockSize.x / 2), 0f, offsetY + (script.blockSize.y / 2))
-            //                         , string.Format("{0}:{1}:{2}", i, j, script.blockMap[i, j]));
-            //            offsetX += script.blockSize.x;
-            //        }
-            //        offsetX = script.borders.x + (script.rectSize.x % script.blockSize.x) / 2;
-            //        offsetY += script.blockSize.y;
-            //    }
-            //}
-            
-        
+                for (int j = 0; j < script.blockCount.y; j++)
+                {
+                    for (int i = 0; i < script.blockCount.x; i++)
+                    {
+                        Handles.Label(script.transform.position + new Vector3(offsetX + (script.blockSize.x / 2), 0f, offsetY + (script.blockSize.y / 2))
+                                     , string.Format("({0})", script.blockMap[i, j]));
+                        offsetX += script.blockSize.x;
+                    }
+                    offsetX = script.borders.x + (script.rectSize.x % script.blockSize.x) / 2;
+                    offsetY += script.blockSize.y;
+                }
+            }
+
+
 
             Handles.BeginGUI();
             GUILayout.Window(1, new Rect(Screen.width - 300, Screen.height - 180, 290, 150), (id) =>

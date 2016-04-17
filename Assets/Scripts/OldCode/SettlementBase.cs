@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using Estate;
 
 namespace Settlement
 {
@@ -68,7 +68,8 @@ namespace Settlement
 
     public class SettlementBase : MonoBehaviour
     {
-
+        public bool DrawValues;
+        public bool DrawGrid;
         public Vector4 borders;
         public Vector2 blockSize;
         private Vector2 tempBlockSize;
@@ -79,7 +80,10 @@ namespace Settlement
         public int[,] blockMap;
         
         public DrawAnchorsMode DrawAnchors;
-        
+
+        private List<int> outerFields;
+
+        public List<Rect> estates;
 
 
         //[HideInInspector]
@@ -115,6 +119,7 @@ namespace Settlement
 
             blockCount = new Vector2(Mathf.Ceil(rectSize.x / blockSize.x), Mathf.Ceil(rectSize.y / blockSize.y));
 
+            GenerateSettlement();
            
             //Vector2 blockOffset = Vector2.zero;
             //while ((int)rectSize.x % blockSize.x != 0)
@@ -145,30 +150,40 @@ namespace Settlement
                 Gizmos.DrawLine(this.transform.position + new Vector3(Anchors[Anchors.Count - 1].x, 0f, Anchors[Anchors.Count - 1].y),
                                 this.transform.position + new Vector3(Anchors[0].x, 0f, Anchors[0].y));
             }
-            Gizmos.color = Color.grey;
-            Gizmos.DrawLine(this.transform.position + new Vector3(borders.x, 0f, borders.y), this.transform.position + new Vector3(borders.x, 0f, borders.w));
-            Gizmos.DrawLine(this.transform.position + new Vector3(borders.x, 0f, borders.w), this.transform.position + new Vector3(borders.z, 0f, borders.w));
-            Gizmos.DrawLine(this.transform.position + new Vector3(borders.z, 0f, borders.w), this.transform.position + new Vector3(borders.z, 0f, borders.y));
-            Gizmos.DrawLine(this.transform.position + new Vector3(borders.z, 0f, borders.y), this.transform.position + new Vector3(borders.x, 0f, borders.y));
-
-            float offset = borders.x;// + (rectSize.x % blockSize.x)/2;
-
-            //tempBlockSize.x = Mathf.Floor(rectSize.x / blockSize.x) + (rectSize.x % blockSize.x);
-            //      tempBlockSize.y = Mathf.Floor(rectSize.y / blockSize.y) + (rectSize.y % ;
-
-            //Debug.Log(Mathf.Floor(rectSize.x / blockSize.x) + " " + Mathf.Floor(rectSize.y / blockSize.y));
-
-            while (offset <= borders.z)
+            if (DrawGrid)
             {
-                Gizmos.DrawLine(this.transform.position + new Vector3(offset, 0f, borders.y), this.transform.position + new Vector3(offset, 0f, borders.w));                
-                offset += blockSize.x;
+                Gizmos.color = Color.grey;
+                Gizmos.DrawLine(this.transform.position + new Vector3(borders.x, 0f, borders.y), this.transform.position + new Vector3(borders.x, 0f, borders.w));
+                Gizmos.DrawLine(this.transform.position + new Vector3(borders.x, 0f, borders.w), this.transform.position + new Vector3(borders.z, 0f, borders.w));
+                Gizmos.DrawLine(this.transform.position + new Vector3(borders.z, 0f, borders.w), this.transform.position + new Vector3(borders.z, 0f, borders.y));
+                Gizmos.DrawLine(this.transform.position + new Vector3(borders.z, 0f, borders.y), this.transform.position + new Vector3(borders.x, 0f, borders.y));
+
+                float offset = borders.x;// + (rectSize.x % blockSize.x)/2;
+
+                //tempBlockSize.x = Mathf.Floor(rectSize.x / blockSize.x) + (rectSize.x % blockSize.x);
+                //      tempBlockSize.y = Mathf.Floor(rectSize.y / blockSize.y) + (rectSize.y % ;
+
+                //Debug.Log(Mathf.Floor(rectSize.x / blockSize.x) + " " + Mathf.Floor(rectSize.y / blockSize.y));
+
+                while (offset <= borders.z)
+                {
+                    Gizmos.DrawLine(this.transform.position + new Vector3(offset, 0f, borders.y), this.transform.position + new Vector3(offset, 0f, borders.w));
+                    offset += blockSize.x;
+                }
+
+                offset = borders.y;// + (rectSize.y % blockSize.y) / 2;
+                while (offset <= borders.w)
+                {
+                    Gizmos.DrawLine(this.transform.position + new Vector3(borders.x, 0f, offset), this.transform.position + new Vector3(borders.z, 0f, offset));
+                    offset += blockSize.y;
+                }
             }
+            Gizmos.color = new Color(1f, 1f, 1f, 0.75f);
 
-            offset = borders.y;// + (rectSize.y % blockSize.y) / 2;
-            while (offset <= borders.w)
+            for(int i=0;i<estates.Count; i++)
             {
-                Gizmos.DrawLine(this.transform.position + new Vector3(borders.x, 0f, offset), this.transform.position + new Vector3(borders.z, 0f, offset));
-                offset += blockSize.y;
+                Gizmos.DrawCube(this.transform.position + new Vector3(estates[i].x + estates[i].width / 2, 15f, estates[i].y + estates[i].height / 2),
+                                new Vector3(estates[i].width * 0.5f, 30f, estates[i].height * 0.5f));
             }
             Gizmos.color = Color.white;
         }
@@ -392,7 +407,7 @@ namespace Settlement
             //}
         }
 
-
+    
 
         public float GetY(Line line, float x)
         {
@@ -400,10 +415,19 @@ namespace Settlement
             return y;
         }
 
+        public float GetX(Line line, float y)
+        {
+            float x = (((y - line.A.y) * (line.B.x - line.A.x)) / (line.B.y - line.A.y)) + line.A.x;
+            return x;
+        }
+
         public void DrawLine(Line line) // Custom algorithm
         {
             Vector2 arrayPoint;
-            //if (line.A.x < line.B.x)
+            Vector2 pointA = WorldToArrayCoord(line.A);
+            Vector2 pointB = WorldToArrayCoord(line.B);
+
+            if (pointA.x != pointB.x)
             {
                 float offsetX = line.A.x;
                 float offsetY;
@@ -412,11 +436,50 @@ namespace Settlement
                     offsetY = GetY(line, offsetX);
                     arrayPoint = WorldToArrayCoord(new Vector2(offsetX, offsetY));
                     blockMap[(int)arrayPoint.x, (int)arrayPoint.y] = 1;
-                    offsetX += (line.A.x < line.B.x ? 1 : -1) * blockSize.x / 4;
+                    offsetX += (line.A.x < line.B.x ? 1 : -1) * blockSize.x / 25;
+                }
+            }
+            else
+            {
+                float offsetX;
+                float offsetY = line.A.y;
+                while (line.A.y < line.B.y ? (offsetY < line.B.y) : (offsetY > line.B.y))
+                {
+                    offsetX = GetX(line, offsetY);
+                    arrayPoint = WorldToArrayCoord(new Vector2(offsetX, offsetY));
+                    blockMap[(int)arrayPoint.x, (int)arrayPoint.y] = 1;
+                    offsetY += (line.A.y < line.B.y ? 1 : -1) * blockSize.y / 25;
                 }
             }
         }
-                        
+
+        public void FloodFill (Vector2 point, int val)
+        {
+            if (point.x >= blockCount.x || point.y >= blockCount.y || point.x < 0 || point.y < 0)
+            {
+                if (!outerFields.Exists(x => x == val)) outerFields.Add(val);
+                return;
+            }
+
+            if (blockMap[(int)point.x, (int)point.y] != 0) return;
+
+            blockMap[(int)point.x, (int)point.y] = val;
+
+            FloodFill(new Vector2(point.x, point.y - 1), val);
+            FloodFill(new Vector2(point.x+1, point.y), val);
+            FloodFill(new Vector2(point.x, point.y + 1), val);
+            FloodFill(new Vector2(point.x - 1, point.y), val);
+            return;
+        }
+
+        public void MakeGhost(int i, int j, int i2, int j2)
+        {
+            Vector2 newCoordA = ArrayToWorldCoord(new Vector2(i, j));
+            Vector2 newCoordB = ArrayToWorldCoord(new Vector2(i2, j2));
+            Rect ghost = new Rect(newCoordA, new Vector2(newCoordB.x - newCoordA.x + blockSize.x, newCoordB.y - newCoordA.y + blockSize.y));
+            estates.Add(ghost);
+        }
+
         public void GenerateSettlement()
         {
             Debug.Log("Step 1: Determining block position");
@@ -437,6 +500,69 @@ namespace Settlement
             }
 
             DrawLine(new Line(Anchors[Anchors.Count-1], Anchors[0]));
+
+            int val = 1;
+            outerFields = new List<int>();
+            estates = new List<Rect>();
+
+            for (int j = 0; j < blockCount.y; j++)
+            {
+                for (int i = 0; i < blockCount.x; i++)
+                {
+                    if (blockMap[i, j] == 0) FloodFill(new Vector2(i, j), ++val);
+                }
+            }
+
+            for (int j = 0; j < blockCount.y; j++)
+            {
+                for (int i = 0; i < blockCount.x; i++)
+                {
+                    if (outerFields.Exists(x => x == blockMap[i, j])) blockMap[i, j] = 0;
+                    else if (blockMap[i, j] != 1) blockMap[i, j] = 2;
+                }
+            }
+
+            //Horizontal tests
+            for (int j = 0; j < blockCount.y; j++)
+            {
+                for (int i = 0; i < blockCount.x; i++)
+                {
+                    if(blockMap[i, j]==2)
+                    {                        
+                        if(blockMap[i+1,j]==2)
+                        {
+                            blockMap[i, j] = blockMap[i + 1, j] = 3;
+
+                            MakeGhost(i, j, i + 1, j);
+                        }
+                    }
+                }
+            }
+
+            for (int j = 0; j < blockCount.y; j++)
+            {
+                for (int i = 0; i < blockCount.x; i++)
+                {
+                    if (blockMap[i, j] == 2)
+                    {
+                        MakeGhost(i, j, i, j);
+                    }
+                }
+            }
+
+            //for (int j = 0; j < blockCount.y; j++)
+            //{
+            //    if (blockMap[0, j] > 1) FloodFill(new Vector2(0, j), 0);
+            //    if (blockMap[(int)blockCount.x - 1, j] > 1) FloodFill(new Vector2((int)blockCount.x - 1, j), 0);
+            //}
+
+            //for (int i = 0; i < blockCount.x; i++)
+            //{
+            //    if (blockMap[i, 0] != 1 && blockMap[i, 0] != 0) FloodFill(new Vector2(i, 0), 0);
+            //    if (blockMap[i, (int)blockCount.y - 1] != 1 && blockMap[i, (int)blockCount.y - 1] != 0) FloodFill(new Vector2(i, (int)blockCount.y - 1), 0);
+            //}
+
+            
 
             //List<int> pool = new List<int>();
             //int prev, next;
@@ -488,7 +614,28 @@ namespace Settlement
                     //Debug.Log(AB.intersectX(PQ));
                 }
 
+        public void GenerateBuildings()
+        {
+            int buildNr = 1;
+            for(int i=0; i<estates.Count; i++)
+            {
+                Rect rect = estates[i];
 
+                GameObject estateObject = new GameObject();
+                {
+                    estateObject.name = string.Format("Estate nr {0}", buildNr++);
+                    estateObject.transform.parent = this.transform;
+                    estateObject.transform.localPosition = new Vector3(rect.x,0f,rect.y);
+                    EstateBase estate = new EstateBase();
+                    {
+                        estate.outerBounds = new Rect(0,0,rect.width,rect.height);
+                        estate.buildingBounds = new Rect(5, 5, rect.width - 10, rect.height - 10);
+                    }
+                    estate.DrawEstate();
+                }
+
+            }
+        }
 
         // Use this for initialization
         void Start()

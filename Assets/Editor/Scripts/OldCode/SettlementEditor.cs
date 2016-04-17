@@ -39,24 +39,26 @@ namespace Settlement
                 }
             }
 
-            if (script.blockMap.GetLength(0) != 0 && script.blockMap.GetLength(1) != 0)
+            if (script.DrawValues)
             {
-                float offsetX = script.borders.x + (script.rectSize.x % script.blockSize.x) / 2;
-                float offsetY = script.borders.y + (script.rectSize.y % script.blockSize.y) / 2;
-
-                for (int j = 0; j < script.blockCount.y; j++)
+                if (script.blockMap.GetLength(0) != 0 && script.blockMap.GetLength(1) != 0)
                 {
-                    for (int i = 0; i < script.blockCount.x; i++)
+                    float offsetX = script.borders.x + (script.rectSize.x % script.blockSize.x) / 2;
+                    float offsetY = script.borders.y + (script.rectSize.y % script.blockSize.y) / 2;
+
+                    for (int j = 0; j < script.blockCount.y; j++)
                     {
-                        Handles.Label(script.transform.position + new Vector3(offsetX + (script.blockSize.x / 2), 0f, offsetY + (script.blockSize.y / 2))
-                                     , string.Format("({0})", script.blockMap[i, j]));
-                        offsetX += script.blockSize.x;
+                        for (int i = 0; i < script.blockCount.x; i++)
+                        {
+                            Handles.Label(script.transform.position + new Vector3(offsetX, 0f, offsetY)
+                                         , string.Format("({0})", script.blockMap[i, j]));
+                            offsetX += script.blockSize.x;
+                        }
+                        offsetX = script.borders.x + (script.rectSize.x % script.blockSize.x) / 2;
+                        offsetY += script.blockSize.y;
                     }
-                    offsetX = script.borders.x + (script.rectSize.x % script.blockSize.x) / 2;
-                    offsetY += script.blockSize.y;
                 }
             }
-
 
 
             Handles.BeginGUI();
@@ -110,17 +112,21 @@ namespace Settlement
             //EditorGUILayout.LabelField("Distance between buildings depends on building height.");
  
             clearDeveloperConsole = EditorGUILayout.Toggle("Clear editor console", clearDeveloperConsole);
-            if(GUILayout.Button("Generate settlement"))
+            if(GUILayout.Button("Refresh settlement"))
             {
-                System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
-                if(clearDeveloperConsole) Debug.ClearDeveloperConsole();
-                Debug.Log("Settlement generation started at "+System.DateTime.Now.ToString());
-                timer.Start();
+            //    System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+           //     if(clearDeveloperConsole) Debug.ClearDeveloperConsole();
+              //  Debug.Log("Settlement generation started at "+System.DateTime.Now.ToString());
+             //   timer.Start();
                 script.GenerateSettlement();
-                timer.Stop();
-                Debug.Log("Settlement generation finished after " + timer.ElapsedMilliseconds + "ms at " + System.DateTime.Now.ToString());
+            //    timer.Stop();
+           //     Debug.Log("Settlement generation finished after " + timer.ElapsedMilliseconds + "ms at " + System.DateTime.Now.ToString());
             }
-            
+
+            if(GUILayout.Button("Generate buildings"))
+            {
+                script.GenerateBuildings();
+            }
 
             showSettlementSettings = EditorGUILayout.Foldout(showSettlementSettings, "Settlement Settings");
             if (showSettlementSettings)

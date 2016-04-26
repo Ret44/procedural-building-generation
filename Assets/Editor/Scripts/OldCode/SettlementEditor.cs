@@ -128,6 +128,11 @@ namespace Settlement
                 script.GenerateBuildings();
             }
 
+            if (GUILayout.Button("Destroy buildings"))
+            {
+                script.DestroyBuildings();
+            }
+
             showSettlementSettings = EditorGUILayout.Foldout(showSettlementSettings, "Settlement Settings");
             if (showSettlementSettings)
             {

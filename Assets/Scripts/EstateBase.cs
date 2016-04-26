@@ -8,7 +8,7 @@ namespace Estate
     {
 
         public string name;
-
+        public Vector3 worldPosition;
         public UnityEngine.Rect outerBounds;
         public UnityEngine.Rect buildingBounds;
 
@@ -66,8 +66,11 @@ namespace Estate
         {
 
         }
+
+
         public void DrawEstate()
         {
+            worldPosition = this.transform.position;
             KillAllChildren();
             //Building Generation
             GameObject buildingObject = new GameObject();
@@ -84,7 +87,7 @@ namespace Estate
 
             building.height = 15f;
             building.width = 15f;
-            building.depth = 15f;
+            building.depth = 20f;
 
             building.foundationHeight = 0.5f;
 

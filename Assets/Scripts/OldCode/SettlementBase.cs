@@ -70,6 +70,7 @@ namespace Settlement
     {
         public bool DrawValues;
         public bool DrawGrid;
+        public bool DrawGhosts;
         public Vector4 borders;
         public Vector2 blockSize;
         private Vector2 tempBlockSize;
@@ -178,12 +179,15 @@ namespace Settlement
                     offset += blockSize.y;
                 }
             }
-            Gizmos.color = new Color(1f, 1f, 1f, 0.75f);
-
-            for(int i=0;i<estates.Count; i++)
+            if (DrawGhosts)
             {
-                Gizmos.DrawCube(this.transform.position + new Vector3(estates[i].x + estates[i].width / 2, 15f, estates[i].y + estates[i].height / 2),
-                                new Vector3(estates[i].width * 0.5f, 30f, estates[i].height * 0.5f));
+                Gizmos.color = new Color(1f, 1f, 1f, 0.75f);
+
+                for (int i = 0; i < estates.Count; i++)
+                {
+                    Gizmos.DrawCube(this.transform.position + new Vector3(estates[i].x + estates[i].width / 2, 15f, estates[i].y + estates[i].height / 2),
+                                    new Vector3(estates[i].width, 30f, estates[i].height));
+                }
             }
             Gizmos.color = Color.white;
         }
@@ -622,21 +626,26 @@ namespace Settlement
                 Rect rect = estates[i];
 
                 GameObject estateObject = new GameObject();
-                {
+                
                     estateObject.name = string.Format("Estate nr {0}", buildNr++);
                     estateObject.transform.parent = this.transform;
                     estateObject.transform.localPosition = new Vector3(rect.x,0f,rect.y);
-                    EstateBase estate = new EstateBase();
-                    {
-                        estate.outerBounds = new Rect(0,0,rect.width,rect.height);
-                        estate.buildingBounds = new Rect(5, 5, rect.width - 10, rect.height - 10);
-                    }
+                    EstateBase estate = estateObject.AddComponent<EstateBase>();
+                    estate.outerBounds = new Rect(0,0,rect.width,rect.height);
+                    estate.buildingBounds = new Rect(5, 5, rect.width - 10, rect.height - 10);
                     estate.DrawEstate();
-                }
-
             }
         }
 
+
+        public void DestroyBuildings()
+        {
+            int children = transform.childCount;
+            for (int i = children - 1; i >= 0; i--)
+            {
+                DestroyImmediate(transform.GetChild(i).gameObject);
+            }
+        }
         // Use this for initialization
         void Start()
         {

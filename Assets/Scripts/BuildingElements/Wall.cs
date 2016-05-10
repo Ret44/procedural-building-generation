@@ -16,8 +16,9 @@ namespace Building
         public float foundationHeight;
         public Vector3 startingPoint;
         public Vector3 directionPoint;
+        public SettlementData data;
+        public Random random;          
 
-                  
         public void MirrorTris()
         {
             List<int> newTris = new List<int>();
@@ -81,8 +82,7 @@ namespace Building
 
             float singlePanelWidth = (wallSize.x - (windowSize.x * windowCount)) / (windowCount + 1);
             float smallPanelHeight = (floorHeight - windowSize.y) / 2;
-
-
+                        
             // Windows
             GameObject window = new GameObject();
             //    window.transform.position = new Vector3(offset.x + singlePanelWidth, offset.y + smallPanelHeight, startingPoint.z);
@@ -132,10 +132,10 @@ namespace Building
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + foundationHeight, startingPoint.z));
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y, startingPoint.z));
 
-                        this.uvs.Add(new Vector2(0f, 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
-                        this.uvs.Add(new Vector2(0f, 1f));
-                        this.uvs.Add(new Vector2(0.25f, 1f));
-                        this.uvs.Add(new Vector2(0.25f, 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
+                        this.uvs.Add(new Vector2((data.wallsFurbished?0.5f:0.75f), (data.wallsFurbished?0.75f:0f) + (floorHeight - foundationHeight) * 0.25f / floorHeight));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 0.75f), (data.wallsFurbished ? 1f : 0.25f)));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 0.75f), (data.wallsFurbished ? 1f : 0.25f)));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? 0.75f : 1f), (data.wallsFurbished ? 0.75f : 0f) + (floorHeight - foundationHeight) * 0.25f / floorHeight));
 
                         this.tris.Add(vertOffset);
                         this.tris.Add(vertOffset + 1);
@@ -156,10 +156,10 @@ namespace Building
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y + foundationHeight, startingPoint.z));
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y, startingPoint.z));
 
-                        this.uvs.Add(new Vector2(0f, 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
-                        this.uvs.Add(new Vector2(0f, 1f));
-                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
-                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 0.75f), (data.wallsFurbished ? 0.75f : 0f) + (floorHeight - foundationHeight) * 0.25f / floorHeight));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 0.75f), (data.wallsFurbished ? 1f : 0.25f)));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 1f : 0.25f)));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 0.75f : 0f) + (floorHeight - foundationHeight) * 0.25f / floorHeight));
 
                         this.tris.Add(vertOffset);
                         this.tris.Add(vertOffset + 1);
@@ -179,10 +179,10 @@ namespace Building
                 this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y + foundationHeight, startingPoint.z));
                 this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y, startingPoint.z));
 
-                this.uvs.Add(new Vector2(0f, 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
-                this.uvs.Add(new Vector2(0f, 1f));
-                this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
-                this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + (floorHeight - foundationHeight) * 0.25f / floorHeight));
+                this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 0.75f), (data.wallsFurbished ? 0.75f : 0f) + (floorHeight - foundationHeight) * 0.25f / floorHeight));
+                this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 0.75f), (data.wallsFurbished ? 1f : 0.25f)));
+                this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 1f : 0.25f)));
+                this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 0.75f : 0f) + (floorHeight - foundationHeight) * 0.25f / floorHeight));
 
                 this.tris.Add(vertOffset);
                 this.tris.Add(vertOffset + 1);
@@ -207,10 +207,10 @@ namespace Building
                     this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y + floorHeight, startingPoint.z));
                     this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y, startingPoint.z));
 
-                    this.uvs.Add(new Vector2(0f, 0.75f));
-                    this.uvs.Add(new Vector2(0f, 1f));
-                    this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
-                    this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f));
+                    this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f), (data.wallsFurbished ? 0.75f : 0f)));
+                    this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f), (data.wallsFurbished ? 1f : 0.25f)));
+                    this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 1f : 0.25f)));
+                    this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 0.75f : 0f)));
 
                     this.tris.Add(vertOffset);
                     this.tris.Add(vertOffset + 1);
@@ -229,10 +229,10 @@ namespace Building
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + smallPanelHeight, startingPoint.z));
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y, startingPoint.z));
 
-                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + ((floorHeight - smallPanelHeight) / floorHeight * 0.25f)));
-                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
-                        this.uvs.Add(new Vector2(0.25f, 1f));
-                        this.uvs.Add(new Vector2(0.25f, 0.75f + ((floorHeight - smallPanelHeight) / floorHeight * 0.25f)));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 0.75f : 0f) + ((floorHeight - smallPanelHeight) / floorHeight * 0.25f)));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 1f : 0.25f)));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + 0.25f, (data.wallsFurbished ? 1f : 0.25f)));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + 0.25f, (data.wallsFurbished ? 0.75f : 0f) + ((floorHeight - smallPanelHeight) / floorHeight * 0.25f)));
 
                         this.tris.Add(vertOffset);
                         this.tris.Add(vertOffset + 1);
@@ -248,10 +248,10 @@ namespace Building
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + floorHeight, startingPoint.z));
                         this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + floorHeight - smallPanelHeight, startingPoint.z));
 
-                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f));
-                        this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + (smallPanelHeight / floorHeight  * 0.25f)));
-                        this.uvs.Add(new Vector2(0.25f, 0.75f + (smallPanelHeight / floorHeight * 0.25f)));
-                        this.uvs.Add(new Vector2(0.25f, 0.75f));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 0.75f : 0f)));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 0.75f : 0f) + (smallPanelHeight / floorHeight  * 0.25f)));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + 0.25f, (data.wallsFurbished ? 0.75f : 0f) + (smallPanelHeight / floorHeight * 0.25f)));
+                        this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + 0.25f, (data.wallsFurbished ? 0.75f : 0f)));
 
                         this.tris.Add(vertOffset);
                         this.tris.Add(vertOffset + 1);
@@ -269,7 +269,7 @@ namespace Building
                                                      new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + floorHeight - smallPanelHeight, startingPoint.z),
                                                      new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + smallPanelHeight, startingPoint.z));
 
-                        windows.AddWindow(singleWindow);
+                        windows.AddWindow(singleWindow,Random.Range(0,3));
                         frames.AddFrame(singleWindow);
                     }
                     else
@@ -284,10 +284,10 @@ namespace Building
                             this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + floorHeight, startingPoint.z));
                             this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + floorHeight - smallPanelHeight - foundationHeight, startingPoint.z));
 
-                            this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + ((floorHeight - smallPanelHeight - foundationHeight) / floorHeight * 0.25f)));
-                            this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
-                            this.uvs.Add(new Vector2(0.25f, 1f));
-                            this.uvs.Add(new Vector2(0.25f, 0.75f + ((floorHeight - smallPanelHeight - foundationHeight) / floorHeight * 0.25f)));
+                            this.uvs.Add(new Vector2((data.wallsFurbished ? 0.25f : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 0.75f : 0f) + ((floorHeight - smallPanelHeight - foundationHeight) / floorHeight * 0.25f)));
+                            this.uvs.Add(new Vector2((data.wallsFurbished ? 0.25f : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 1f : 0.25f)));
+                            this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 1f), (data.wallsFurbished ? 1f : 0.25f)));
+                            this.uvs.Add(new Vector2((data.wallsFurbished ? 0.5f : 1f), (data.wallsFurbished ? 0.75f : 0f) + ((floorHeight - smallPanelHeight - foundationHeight) / floorHeight * 0.25f)));
                             
                             this.tris.Add(vertOffset);
                             this.tris.Add(vertOffset + 1);
@@ -313,10 +313,10 @@ namespace Building
                             this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + floorHeight, startingPoint.z));
                             this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + biasedWindow.y, startingPoint.z));
 
-                            this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f + ((biasedWindow.y) / floorHeight * 0.25f)));
-                            this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
-                            this.uvs.Add(new Vector2(0.25f, 1f));
-                            this.uvs.Add(new Vector2(0.25f, 0.75f + ((biasedWindow.y) / floorHeight * 0.25f)));
+                            this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < floorCount - 1 ? 0.25f : 0f) : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 0.75f : 0f) + ((biasedWindow.y) / floorHeight * 0.25f)));
+                            this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < floorCount - 1 ? 0.25f : 0f) : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 1f : 0.25f)));
+                            this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < floorCount - 1 ? 0.25f : 0f) : 0.75f) + 0.25f, (data.wallsFurbished ? 1f : 0.25f)));
+                            this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < floorCount - 1 ? 0.25f : 0f) : 0.75f) + 0.25f, (data.wallsFurbished ? 0.75f : 0f) + ((biasedWindow.y) / floorHeight * 0.25f)));
 
                             this.tris.Add(vertOffset);
                             this.tris.Add(vertOffset + 1);
@@ -332,7 +332,7 @@ namespace Building
                                                          new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y + biasedWindow.y, startingPoint.z),
                                                          new Vector3(offset.x + singlePanelWidth + windowSize.x, offset.y, startingPoint.z));
 
-                            windows.AddWindow(singleWindow,1);
+                            windows.AddWindow(singleWindow,3);
                             frames.AddFrame(singleWindow);
                         }
                     }
@@ -345,10 +345,10 @@ namespace Building
                 this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y + floorHeight, startingPoint.z));
                 this.vertices.Add(new Vector3(offset.x + singlePanelWidth, offset.y, startingPoint.z));
 
-                this.uvs.Add(new Vector2(0f, 0.75f));
-                this.uvs.Add(new Vector2(0f, 1f));
-                this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 1f));
-                this.uvs.Add(new Vector2((singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), 0.75f));
+                this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f), (data.wallsFurbished ? 0.75f : 0f)));
+                this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f), (data.wallsFurbished ? 1f : 0.25f)));
+                this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 1f : 0.25f)));
+                this.uvs.Add(new Vector2((data.wallsFurbished ? (floor < 2 ? 0.5f : 0f) : 0.75f) + (singlePanelWidth * 0.25f / (singlePanelWidth + windowSize.x)), (data.wallsFurbished ? 0.75f : 0f)));
 
                 this.tris.Add(vertOffset);
                 this.tris.Add(vertOffset + 1);

@@ -28,9 +28,9 @@ namespace Building
             this.vertices.Add(points.C + new Vector3(0f, 0f, windowFrameSize));
             this.vertices.Add(points.D + new Vector3(0f, 0f, windowFrameSize));
 
-            float uvOffset = (float)wType / 4;
+          //  float uvOffset = (float)wType / 4;
 
-            this.AddUVs(new Vector2(uvOffset, 0.5f));
+            this.AddUVs(UV.Window(wType));
              
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);

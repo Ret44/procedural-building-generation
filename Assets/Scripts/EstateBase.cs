@@ -11,7 +11,7 @@ namespace Estate
         public Vector3 worldPosition;
         public UnityEngine.Rect outerBounds;
         public UnityEngine.Rect buildingBounds;
-
+        public SettlementData data;
         public BuildingBase building;
 
         public void OnDrawGizmos()
@@ -87,17 +87,20 @@ namespace Estate
 
             building.height = 15f;
             building.width = 15f;
-            building.depth = 20f;
+            building.depth = 15;
 
             building.foundationHeight = 0.5f;
+
+            building.data = this.data;
 
             building.windowFrameSize = 0.1f;
             building.windowSize = new Vector2(1f, 1.2f);
             building.windowOffset = 1f;
             building.balconyLength = 0.5f;
 
-            building.buildingMaterial = Resources.Load("Materials/building") as Material;
+            building.buildingMaterial = data.material; //Resources.Load("Materials/building") as Material;
 
+            
             building.DrawBuilding();
 
             //Everything else

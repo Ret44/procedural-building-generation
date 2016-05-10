@@ -17,11 +17,14 @@ namespace Building
         {
             this.vertices = new List<Vector3>();
             this.tris = new List<int>();
+            this.uvs = new List<Vector2>();
 
             this.vertices.Add(PointA);
             this.vertices.Add(PointB);
             this.vertices.Add(PointC);
             this.vertices.Add(PointD);
+
+            this.AddUVs(UV.BareWall);
 
             this.tris.Add(0);
             this.tris.Add(1);

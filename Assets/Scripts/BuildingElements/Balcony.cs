@@ -25,7 +25,7 @@ namespace Building
             this.vertices.Add(new Vector3(points.D.x, points.D.y, points.D.z));
             this.vertices.Add(new Vector3(points.D.x, points.D.y, points.D.z - balconyLength));
 
-            this.AddUVs(new Vector2(0.25f,0.75f));
+            this.AddUVs(UV.Detail);
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
@@ -51,7 +51,7 @@ namespace Building
             this.vertices.Add(new Vector3(points.C.x, points.C.y, points.C.z - balconyLength));
             this.vertices.Add(new Vector3(points.D.x, points.D.y, points.D.z - balconyLength));
 
-            this.AddUVs(new Vector2(0f, 0f));
+            this.AddUVs(UV.Rail);
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
@@ -77,7 +77,7 @@ namespace Building
             this.vertices.Add(new Vector3(points.B.x, points.B.y, points.B.z));
             this.vertices.Add(new Vector3(points.A.x, points.A.y, points.A.z));
 
-            this.AddUVs(new Vector2(0f, 0f));
+            this.AddUVs(UV.Rail);
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
@@ -103,7 +103,7 @@ namespace Building
             this.vertices.Add(new Vector3(points.C.x, points.C.y, points.C.z));
             this.vertices.Add(new Vector3(points.D.x, points.D.y, points.D.z));
 
-            this.AddUVs(new Vector2(0f, 0f));
+            this.AddUVs(UV.Rail);
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);

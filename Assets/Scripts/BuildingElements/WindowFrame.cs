@@ -24,7 +24,7 @@ namespace Building
             this.vertices.Add(points.B + new Vector3(0f,0f,windowFrameSize));
             this.vertices.Add(points.A + new Vector3(0f, 0f, windowFrameSize));
 
-            this.AddUVs(new Vector2(0.25f,0.75f));
+            this.AddUVs(UV.Detail);
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
@@ -40,7 +40,7 @@ namespace Building
             this.vertices.Add(points.C + new Vector3(0f, 0f, windowFrameSize));
             this.vertices.Add(points.B + new Vector3(0f, 0f, windowFrameSize));
 
-            this.AddUVs(new Vector2(0.25f, 0.75f));
+            this.AddUVs(UV.Detail);
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
@@ -56,7 +56,7 @@ namespace Building
             this.vertices.Add(points.D + new Vector3(0f, 0f, windowFrameSize));
             this.vertices.Add(points.C + new Vector3(0f, 0f, windowFrameSize));
 
-            this.AddUVs(new Vector2(0.25f, 0.75f));
+            this.AddUVs(UV.Detail);
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);
@@ -72,7 +72,7 @@ namespace Building
             this.vertices.Add(points.A + new Vector3(0f, 0f, windowFrameSize));
             this.vertices.Add(points.D + new Vector3(0f, 0f, windowFrameSize));
 
-            this.AddUVs(new Vector2(0.25f, 0.75f));
+            this.AddUVs(UV.Detail);
 
             this.tris.Add(vertOffset);
             this.tris.Add(vertOffset + 1);

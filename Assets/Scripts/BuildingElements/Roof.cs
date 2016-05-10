@@ -9,10 +9,18 @@ namespace Building
         public float depth;
         public float height;
 
+        public Vector3 PointA;
+        public Vector3 PointB;
+        public Vector3 PointC;
+        public Vector3 PointD;
+
+
         public Vector2 wallSize;
         public Vector2 windowSize;
         public float windowOffset;
         public float windowFrameSize;
+
+        public Vector3 startingPoint;
 
         public List<int> CalculateStairways(int windowCount)
         {
@@ -58,7 +66,13 @@ namespace Building
 
             int windowCount = Mathf.FloorToInt(wallSize.x / (windowSize.x + windowOffset));
             int floorCount = Mathf.FloorToInt(wallSize.y / (windowSize.y * 2));
-            float singlePanelWidth = (wallSize.x - (windowSize.x * windowCount)) / (windowCount + 1);
+            //float singlePanelWidth = (wallSize.x - (windowSize.x * windowCount)) / (windowCount + 1);
+                        
+            float singlePanelWidth = windowSize.x * 2;
+            float singlePanelHeight = windowSize.y * 2;
+            float cols = (this.PointD.z - this.PointA.z) / singlePanelWidth;
+            float rows = wallSize.x / singlePanelHeight;
+
 
             bool generateShafts = (floorCount >= 5 ? true : false);
 
@@ -78,58 +92,82 @@ namespace Building
             shafts.material = this.material;
             shafts.Init();
 
-            for (int i = 0; i < windowCount; i++)
+            for (int col = 0; col < cols; col++)
+                
             {
-                offset = new Vector2(i * (singlePanelWidth + windowSize.x), 0f);
-                this.vertices.Add(new Vector3(offset.x, height, offset.y));
-                this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, height, offset.y));
-                this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, height, offset.y + depth));
-                this.vertices.Add(new Vector3(offset.x, height, offset.y + depth));
-
-                this.AddUVs(new Vector2(0.5f, 0.75f));
-
-                this.tris.Add(vertOffset + 2);
-                this.tris.Add(vertOffset + 1);
-                this.tris.Add(vertOffset);
-
-                this.tris.Add(vertOffset);
-                this.tris.Add(vertOffset + 3);
-                this.tris.Add(vertOffset + 2);
-                vertOffset += 4;
-
-                if (stairways.Count != 0 && stairways[0] == i && generateShafts) // stairway?
+                for (int row = 0; row < rows; row++)
                 {
-                    stairways.RemoveAt(0);
-                    stairways.Add(i);
+                    offset = new Vector2(row * singlePanelHeight, startingPoint.x + (col * singlePanelWidth));
+                    this.vertices.Add(new Vector3(offset.x, height, offset.y));
+                    this.vertices.Add(new Vector3(offset.x, height, offset.y + singlePanelWidth));
+                    this.vertices.Add(new Vector3(offset.x + singlePanelHeight, height, offset.y + singlePanelWidth));
+                    this.vertices.Add(new Vector3(offset.x + singlePanelHeight, height, offset.y));
 
-                    Rect singleShaft = new Rect(new Vector3(offset.x + (singlePanelWidth * 2) * 0.15f, height, offset.y),
-                                                new Vector3(offset.x + (singlePanelWidth * 2) * 0.75f + windowSize.x , height, offset.y),
-                                                new Vector3(offset.x + (singlePanelWidth * 2) * 0.75f + windowSize.x , height, offset.y + (depth * 0.75f)),
-                                                new Vector3(offset.x + (singlePanelWidth * 2) * 0.15f, height, offset.y + (depth * 0.75f)));
-                    
+                    this.AddUVs(UV.Roof);
 
-                    shafts.AddShaft(singleShaft, (wallSize.y / floorCount) * 0.75f);
-                    
-                }               
+                    this.tris.Add(vertOffset);
+                    this.tris.Add(vertOffset + 1);
+                    this.tris.Add(vertOffset + 2);
 
+                    this.tris.Add(vertOffset + 2);
+                    this.tris.Add(vertOffset + 3);
+                    this.tris.Add(vertOffset);
+                    vertOffset += 4;
+                }
             }
-            offset = new Vector2(windowCount * (singlePanelWidth + windowSize.x),0f);
-            this.vertices.Add(new Vector3(offset.x, height, offset.y));
-            this.vertices.Add(new Vector3(offset.x + singlePanelWidth, height, offset.y));
-            this.vertices.Add(new Vector3(offset.x + singlePanelWidth, height, offset.y+ depth));
-            this.vertices.Add(new Vector3(offset.x, height, offset.y + depth));
 
-            this.AddUVs(new Vector2(0.5f, 0.75f));
+            //for (int i = 0; i < windowCount; i++)
+            //{
+            //    offset = new Vector2(i * (singlePanelWidth + windowSize.x), 0f);
+            //    this.vertices.Add(new Vector3(offset.x, height, offset.y));
+            //    this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, height, offset.y));
+            //    this.vertices.Add(new Vector3(offset.x + singlePanelWidth + windowSize.x, height, offset.y + depth));
+            //    this.vertices.Add(new Vector3(offset.x, height, offset.y + depth));
 
-            this.tris.Add(vertOffset + 2);
-            this.tris.Add(vertOffset + 1);
-            this.tris.Add(vertOffset);
+            //    this.AddUVs(UV.Roof);
 
-            this.tris.Add(vertOffset);
-            this.tris.Add(vertOffset + 3);
-            this.tris.Add(vertOffset + 2);
+            //    this.tris.Add(vertOffset + 2);
+            //    this.tris.Add(vertOffset + 1);
+            //    this.tris.Add(vertOffset);
 
-            shafts.Draw();
+            //    this.tris.Add(vertOffset);
+            //    this.tris.Add(vertOffset + 3);
+            //    this.tris.Add(vertOffset + 2);
+            //    vertOffset += 4;
+
+            //    if (stairways.Count != 0 && stairways[0] == i && generateShafts) // stairway?
+            //    {
+            //        stairways.RemoveAt(0);
+            //        stairways.Add(i);
+
+            //        Rect singleShaft = new Rect(new Vector3(offset.x + (singlePanelWidth * 2) * 0.15f, height, offset.y),
+            //                                    new Vector3(offset.x + (singlePanelWidth * 2) * 0.75f + windowSize.x , height, offset.y),
+            //                                    new Vector3(offset.x + (singlePanelWidth * 2) * 0.75f + windowSize.x , height, offset.y + (depth * 0.75f)),
+            //                                    new Vector3(offset.x + (singlePanelWidth * 2) * 0.15f, height, offset.y + (depth * 0.75f)));
+                    
+
+            //        shafts.AddShaft(singleShaft, (wallSize.y / floorCount) * 0.75f);
+                    
+            //    }               
+
+            //}
+            //offset = new Vector2(windowCount * (singlePanelWidth + windowSize.x),0f);
+            //this.vertices.Add(new Vector3(offset.x, height, offset.y));
+            //this.vertices.Add(new Vector3(offset.x + singlePanelWidth, height, offset.y));
+            //this.vertices.Add(new Vector3(offset.x + singlePanelWidth, height, offset.y+ depth));
+            //this.vertices.Add(new Vector3(offset.x, height, offset.y + depth));
+
+            //this.AddUVs(UV.Roof);
+
+            //this.tris.Add(vertOffset + 2);
+            //this.tris.Add(vertOffset + 1);
+            //this.tris.Add(vertOffset);
+
+            //this.tris.Add(vertOffset);
+            //this.tris.Add(vertOffset + 3);
+            //this.tris.Add(vertOffset + 2);
+
+            //shafts.Draw();
             base.Draw();
         }
     }

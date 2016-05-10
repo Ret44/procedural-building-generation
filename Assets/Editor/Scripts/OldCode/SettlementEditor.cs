@@ -20,14 +20,18 @@ namespace Settlement
         public void OnSceneGUI()
         {
             SettlementBase script = (SettlementBase)target;
-                        
-            for(int i=0; i<script.Anchors.Count; ++i)
+
+            float dx = 0, dy = 0;
+
+            for (int i=0; i<script.Anchors.Count; ++i)
             {
                 tempPos = script.transform.position + new Vector3(script.Anchors[i].x, 0f, script.Anchors[i].y);
                 Handles.Label(tempPos, (selectedAnchor==i?"SELECTED ID: ":"ID: ")+i+" "+script.Anchors[i].ToString());
                 EditorGUI.BeginChangeCheck();
                 tempVal = Handles.FreeMoveHandle(tempPos, Quaternion.Euler(90f, 0f, 0f), 2.5f, new Vector3(1f, 1f, 1f), Handles.RectangleCap);
                 //tempValX = Handles.tempPos.x, tempPos, Vector3.left, 2f, Handles.CircleCap, 0.5f);               
+                dx += script.Anchors[i].x;
+                dy += script.Anchors[i].y;
                 if (EditorGUI.EndChangeCheck())
                 {
                     tempVal -= script.transform.position;
@@ -38,6 +42,11 @@ namespace Settlement
                     //t.Update();
                 }
             }
+
+            dx /= script.Anchors.Count;
+            dy /= script.Anchors.Count;
+
+            Handles.Label(script.transform.position + new Vector3(dx, 0, dy), (script.data!=null)?script.data.name:"");
 
             if (script.DrawValues)
             {
@@ -105,22 +114,28 @@ namespace Settlement
             EditorGUILayout.HelpBox(info, MessageType.Info);
             EditorGUILayout.Space();
 
+          //  script.dataIndex = EditorGUILayout.Popup("District", script.dataIndex, DistrictManager.GetOptions());
+
+            script.data = EditorGUILayout.ObjectField("Style", script.data, typeof(SettlementData), false) as SettlementData;
+
             //EditorGUILayout.LabelField("Regulations");
             //EditorGUILayout.FloatField("Road width:",script.RoadWidth);
             //EditorGUILayout.FloatField("Road<->Building:", script.RoadWidth);
             //EditorGUILayout.FloatField("MAX(Building<->Building)", script.RoadWidth);
             //EditorGUILayout.LabelField("Distance between buildings depends on building height.");
- 
+
             clearDeveloperConsole = EditorGUILayout.Toggle("Clear editor console", clearDeveloperConsole);
             if(GUILayout.Button("Refresh settlement"))
             {
-            //    System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
-           //     if(clearDeveloperConsole) Debug.ClearDeveloperConsole();
-              //  Debug.Log("Settlement generation started at "+System.DateTime.Now.ToString());
-             //   timer.Start();
-                script.GenerateSettlement();
-            //    timer.Stop();
-           //     Debug.Log("Settlement generation finished after " + timer.ElapsedMilliseconds + "ms at " + System.DateTime.Now.ToString());
+                //    System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+                //     if(clearDeveloperConsole) Debug.ClearDeveloperConsole();
+                //  Debug.Log("Settlement generation started at "+System.DateTime.Now.ToString());
+                //   timer.Start();
+                //     script.GenerateSettlement();
+                //    timer.Stop();
+                //     Debug.Log("Settlement generation finished after " + timer.ElapsedMilliseconds + "ms at " + System.DateTime.Now.ToString());
+                script.DestroyBuildings();
+                script.GenerateBuildings();
             }
 
             if(GUILayout.Button("Generate buildings"))

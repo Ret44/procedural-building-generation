@@ -8,6 +8,8 @@ public class BuildingBase : MonoBehaviour
 
     public bool DrawGizmos;
 
+    public SettlementData data;
+
     [Header("Gizmos position")]
     public Vector3 PointA = new Vector3(-0.5f, 0f, 0.5f);
     public Vector3 PointB = new Vector3(0.5f, 0f, 0.5f);
@@ -113,6 +115,15 @@ public class BuildingBase : MonoBehaviour
         System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
         List<Drawable> objects = new List<Drawable>();
 
+       // UpdatePoints();
+
+        //Assign values
+        this.windowOffset = data.windowOffset;
+        this.windowSize = data.windowSize;
+        this.balconyLength = data.balconyLength;
+        this.height = data.height;
+        this.foundationHeight = data.foundationHeight;
+
         timer.Start();
 
         // North wall
@@ -127,6 +138,7 @@ public class BuildingBase : MonoBehaviour
         wallComponent.windowSize = this.windowSize;
         wallComponent.windowFrameSize = this.windowFrameSize;
         wallComponent.foundationHeight = this.foundationHeight;
+        wallComponent.data = this.data;
         wallComponent.material = this.buildingMaterial;
         wallComponent.Draw();
      // 
@@ -147,6 +159,7 @@ public class BuildingBase : MonoBehaviour
         bWallComponent.foundationHeight = this.foundationHeight;
         bWallComponent.balconyLength = this.balconyLength;
         bWallComponent.material = this.buildingMaterial;
+        bWallComponent.data = this.data;
         bWallComponent.Draw();
 
         wallS.transform.Rotate(new Vector3(0f, 180f, 0f));
@@ -174,28 +187,49 @@ public class BuildingBase : MonoBehaviour
         wallW.transform.parent = this.transform;
         wallW.name = "Generated West Wall";
         wallW.transform.localPosition = Vector3.zero;
-        Panel panelComponent = wallW.AddComponent<Panel>();
-        panelComponent.PointA = this.PointD;
-        panelComponent.PointB = PointD + new Vector3(0f, height, 0f);
-        panelComponent.PointC = PointA + new Vector3(0f, height, 0f); 
-        panelComponent.PointD = this.PointA;
-        panelComponent.Draw();
+        //Panel panelComponent = wallW.AddComponent<Panel>();
+        //panelComponent.PointA = this.PointD;
+        //panelComponent.PointB = PointD + new Vector3(0f, height, 0f);
+        //panelComponent.PointC = PointA + new Vector3(0f, height, 0f); 
+        //panelComponent.PointD = this.PointA;
+        //panelComponent.material = this.buildingMaterial;
+        //panelComponent.Draw();
+        SideWall sWallComponent = wallW.AddComponent<SideWall>();
+        sWallComponent.PointA = this.PointD;
+        sWallComponent.PointB = PointD + new Vector3(0f, height, 0f);
+        sWallComponent.PointC = PointA + new Vector3(0f, height, 0f);
+        sWallComponent.PointD = this.PointA;
+        sWallComponent.startingPoint = this.PointD;
+        sWallComponent.foundationHeight = this.foundationHeight;
+        sWallComponent.windowSize = this.windowSize;
+        sWallComponent.wallHeight = this.height - this.foundationHeight;
+        sWallComponent.data = this.data;
+        sWallComponent.eastSide = false;
+        sWallComponent.material = this.buildingMaterial;
+        sWallComponent.Draw();
 
-        objects.Add(panelComponent);
+        objects.Add(sWallComponent);
 
         // East wall
         GameObject wallE = new GameObject();
         wallE.transform.parent = this.transform;
         wallE.name = "Generated East Wall";
         wallE.transform.localPosition = Vector3.zero;
-        panelComponent = wallE.AddComponent<Panel>();
-        panelComponent.PointA = this.PointB;
-        panelComponent.PointB = PointB + new Vector3(0f, height, 0f);
-        panelComponent.PointC = PointC + new Vector3(0f, height, 0f);
-        panelComponent.PointD = this.PointC;
-        panelComponent.Draw();
+        sWallComponent = wallE.AddComponent<SideWall>();
+        sWallComponent.PointA = this.PointD;
+        sWallComponent.PointB = PointD + new Vector3(0f, height, 0f);
+        sWallComponent.PointC = PointA + new Vector3(0f, height, 0f);
+        sWallComponent.PointD = this.PointA;
+        sWallComponent.startingPoint = this.PointB;
+        sWallComponent.foundationHeight = this.foundationHeight;
+        sWallComponent.windowSize = this.windowSize;
+        sWallComponent.wallHeight = this.height - this.foundationHeight;
+        sWallComponent.data = this.data;
+        sWallComponent.eastSide = true;
+        sWallComponent.material = this.buildingMaterial;
+        sWallComponent.Draw();
 
-        objects.Add(panelComponent);
+        //objects.Add(sWallComponent);
 
         //Roof 
         GameObject roof = new GameObject();
@@ -203,12 +237,17 @@ public class BuildingBase : MonoBehaviour
         roof.name = "Generated Roof";
         roof.transform.localPosition = Vector3.zero;
         Roof roofComponent = roof.AddComponent<Roof>();
+        roofComponent.PointA = this.PointA;
+        roofComponent.PointB = this.PointB;
+        roofComponent.PointC = this.PointC;
+        roofComponent.PointD = this.PointD;
         roofComponent.depth = this.depth;
         roofComponent.height = this.height;
         roofComponent.wallSize = new Vector2(Vector3.Distance(this.PointA, this.PointB), this.height - this.foundationHeight);
         roofComponent.windowSize = this.windowSize;
         roofComponent.windowOffset = this.windowOffset;
         roofComponent.windowFrameSize = this.windowFrameSize;
+        roofComponent.startingPoint = this.PointA;// + new Vector3(0f,0f,depth);
         roofComponent.material = this.buildingMaterial;
         roofComponent.Draw();
 

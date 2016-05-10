@@ -73,6 +73,9 @@ namespace Settlement
         public bool DrawGhosts;
         public Vector4 borders;
         public Vector2 blockSize;
+
+        public int dataIndex;
+
         private Vector2 tempBlockSize;
 
         public Vector2 blockCount;
@@ -81,6 +84,8 @@ namespace Settlement
         public int[,] blockMap;
         
         public DrawAnchorsMode DrawAnchors;
+
+        public SettlementData data;
 
         private List<int> outerFields;
 
@@ -118,6 +123,7 @@ namespace Settlement
 
             rectSize = new Vector2(borders.z - borders.x, borders.w - borders.y);
 
+            blockSize = new Vector2(30f, 15f + data.height);
             blockCount = new Vector2(Mathf.Ceil(rectSize.x / blockSize.x), Mathf.Ceil(rectSize.y / blockSize.y));
 
             GenerateSettlement();
@@ -141,15 +147,19 @@ namespace Settlement
         void OnDrawAnchors()
         {
 
+            Gizmos.color = (data!=null)?data.borderColor:Color.white;
+            
             if (Anchors.Count > 1)
             {
                 for (int i = 0; i < Anchors.Count - 1; i++)
                 {
                     Gizmos.DrawLine(this.transform.position + new Vector3(Anchors[i].x, 0f, Anchors[i].y),
                                     this.transform.position + new Vector3(Anchors[i + 1].x, 0f, Anchors[i + 1].y));
+                    
                 }
                 Gizmos.DrawLine(this.transform.position + new Vector3(Anchors[Anchors.Count - 1].x, 0f, Anchors[Anchors.Count - 1].y),
                                 this.transform.position + new Vector3(Anchors[0].x, 0f, Anchors[0].y));
+       
             }
             if (DrawGrid)
             {
@@ -235,6 +245,10 @@ namespace Settlement
         /// <returns></returns>
         public int CheckRect(int x, int y)
         {
+            
+            blockSize = new Vector2(30f, 15f + data.height);
+
+
             Rect rect = new Rect(x*blockSize.x + (rectSize.x % blockSize.x)/2 + borders.x,
                                 y * blockSize.y + (rectSize.x % blockSize.x)/2 + borders.y,
                                 blockSize.x,blockSize.y);
@@ -486,7 +500,7 @@ namespace Settlement
 
         public void GenerateSettlement()
         {
-            Debug.Log("Step 1: Determining block position");
+            //  Debug.Log("Step 1: Determining block position");
 
             blockMap = new int[Mathf.CeilToInt(blockCount.x), Mathf.CeilToInt(blockCount.y)];
             for (int j = 0; j < blockCount.y; j++)
@@ -632,7 +646,8 @@ namespace Settlement
                     estateObject.transform.localPosition = new Vector3(rect.x,0f,rect.y);
                     EstateBase estate = estateObject.AddComponent<EstateBase>();
                     estate.outerBounds = new Rect(0,0,rect.width,rect.height);
-                    estate.buildingBounds = new Rect(5, 5, rect.width - 10, rect.height - 10);
+                    estate.buildingBounds = new Rect(5, data.height /2 , rect.width - 10, 10);
+                    estate.data = this.data;
                     estate.DrawEstate();
             }
         }

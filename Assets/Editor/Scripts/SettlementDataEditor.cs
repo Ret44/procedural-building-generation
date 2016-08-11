@@ -17,7 +17,7 @@ public class SettlementDataEditor : Editor
 
 
     public override void OnInspectorGUI()
-    {        
+    {
         SettlementData script = (SettlementData)target;
         string info = "Procedural Building Generation Thesis. \n" +
                       "made by Bartłomiej Sieczka\n" +
@@ -26,38 +26,30 @@ public class SettlementDataEditor : Editor
         EditorGUILayout.HelpBox(info, MessageType.Info);
         EditorGUILayout.Space();
 
-        script.name = EditorGUILayout.TextField("Style name ", script.name);
-        EditorGUILayout.LabelField("Editor outline color");
-        script.borderColor = EditorGUILayout.ColorField(script.borderColor);
-        script.randomizationSeed = EditorGUILayout.TextField("Randomization seed", script.randomizationSeed);
-
-        EditorGUILayout.Space();
-
-        //if (GUILayout.Button("Generate materials and textures"))
-        //{
-        //  //  script.GenerateMaterial(new Vector2(30, 30));
-        //}
-
-        EditorGUILayout.Space();
-
-        script.wallsFurbished = EditorGUILayout.Toggle("Walls furbished", script.wallsFurbished);
-
-        if (script.wallsFurbished)
+        if (script.manager != null)
         {
-            script.mainColor = EditorGUILayout.ColorField("Main color", script.mainColor);
-            script.material.SetColor("_Color", script.mainColor);
-            script.addColorCount = EditorGUILayout.IntSlider("Additional colors",script.addColorCount, 0, 3);
-
-            for (int i = 0; i < script.addColorCount; i++)
+            if (GUILayout.Button("Back to Style Manager"))
             {
-                script.addColor[i] = EditorGUILayout.ColorField(string.Format("Color {0}", i + 1), script.addColor[i]);
-                script.material.SetColor(string.Format("_Color{0}",i+1), script.addColor[i]);
+                Selection.activeGameObject = script.manager.gameObject;
             }
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Clone"))
+            {
+                Selection.activeGameObject = script.manager.cloneStyle(script);
+            }
+
+            if (GUILayout.Button("Delete"))
+            {
+                Selection.activeGameObject = script.manager.gameObject;
+                script.manager.deleteStyle(script);
+            }
+            EditorGUILayout.EndHorizontal();
         }
+        else
+            EditorGUILayout.LabelField("Default Settlement style");
 
-        defaultInspector = EditorGUILayout.Foldout(defaultInspector, "Default Inspector");
-        if (defaultInspector) DrawDefaultInspector();
-
-        EditorUtility.SetDirty(script);
+        EditorGUILayout.Space();
+        DrawDefaultInspector();
     }
 }

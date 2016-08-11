@@ -116,7 +116,7 @@ namespace Settlement
 
           //  script.dataIndex = EditorGUILayout.Popup("District", script.dataIndex, DistrictManager.GetOptions());
 
-            script.data = EditorGUILayout.ObjectField("Style", script.data, typeof(SettlementData), false) as SettlementData;
+          //  script.data = EditorGUILayout.ObjectField("Style", script.data, typeof(SettlementData), false) as SettlementData;
 
             //EditorGUILayout.LabelField("Regulations");
             //EditorGUILayout.FloatField("Road width:",script.RoadWidth);
@@ -124,7 +124,13 @@ namespace Settlement
             //EditorGUILayout.FloatField("MAX(Building<->Building)", script.RoadWidth);
             //EditorGUILayout.LabelField("Distance between buildings depends on building height.");
 
-            clearDeveloperConsole = EditorGUILayout.Toggle("Clear editor console", clearDeveloperConsole);
+         //   clearDeveloperConsole = EditorGUILayout.Toggle("Clear editor console", clearDeveloperConsole);
+
+            if(GUILayout.Button("Back to Generation Manager"))
+            {
+                Selection.activeGameObject = script.manager.gameObject;
+            }
+
             if(GUILayout.Button("Refresh settlement"))
             {
                 //    System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();

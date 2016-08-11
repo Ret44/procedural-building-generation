@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu(fileName = "Settlement", menuName = "Settlement Data", order = 1)]
-public class SettlementData : ScriptableObject
+//[CreateAssetMenu(fileName = "Settlement", menuName = "Settlement Data", order = 1)]
+public class SettlementData : MonoBehaviour
 {
+    [HideInInspector]
+    public StyleManager manager;
+
     public string name;
     public Color borderColor;
     public string randomizationSeed;

@@ -68,6 +68,9 @@ namespace Settlement
 
     public class SettlementBase : MonoBehaviour
     {
+
+        public GenerationManager manager;
+
         public bool DrawValues;
         public bool DrawGrid;
         public bool DrawGhosts;

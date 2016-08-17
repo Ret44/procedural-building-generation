@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
+using Settlement;
 
 [CustomEditor(typeof(SettlementData))]
 public class SettlementDataEditor : Editor
@@ -13,9 +15,10 @@ public class SettlementDataEditor : Editor
     public void OnEnable()
     {
         script = target as SettlementData;
+        if (script.defaultStyle)
+            script.manager = script.GetComponent<StyleManager>();
     }
-
-
+   
     public override void OnInspectorGUI()
     {
         SettlementData script = (SettlementData)target;
@@ -26,7 +29,8 @@ public class SettlementDataEditor : Editor
         EditorGUILayout.HelpBox(info, MessageType.Info);
         EditorGUILayout.Space();
 
-        if (script.manager != null)
+
+        if (!script.defaultStyle)
         {
             if (GUILayout.Button("Back to Style Manager"))
             {
@@ -48,6 +52,38 @@ public class SettlementDataEditor : Editor
         }
         else
             EditorGUILayout.LabelField("Default Settlement style");
+
+        EditorGUILayout.Space();
+
+        int count = 0;
+
+        if (script.manager.generationManager.settlements != null)
+        {
+            EditorGUILayout.LabelField("List of connected settlements:");
+
+            for (int i = 0; i < script.manager.generationManager.settlements.Count; i++)
+            {
+                SettlementBase settlement = script.manager.generationManager.settlements[i];
+                if (settlement.data != null && settlement.data == script)
+                {
+                    EditorGUILayout.LabelField(string.Format(" - {0}", settlement.name));
+                    count++;
+                }
+            }
+            if (count == 0)
+            {
+                EditorGUILayout.Space();
+                EditorGUILayout.LabelField("   None");
+                EditorGUILayout.Space();
+            }
+            else
+            {
+                if (GUILayout.Button("Refresh all"))
+                {
+                    script.manager.generationManager.refreshStyle(script);
+                }
+            }
+        }
 
         EditorGUILayout.Space();
         DrawDefaultInspector();

@@ -132,6 +132,22 @@ public class BuildingEditor : Editor {
         EditorGUILayout.HelpBox(Info, MessageType.Info);
         EditorGUILayout.Space();
 
+        EditorGUILayout.BeginHorizontal();
+        if(GUILayout.Button("GenMag"))
+        {
+            Selection.activeGameObject = script.transform.parent.parent.GetComponent<Settlement.SettlementBase>().manager.gameObject;
+        }
+        if(GUILayout.Button("Settlement"))
+        {
+            Selection.activeGameObject = script.transform.parent.parent.gameObject;
+        }
+        if(GUILayout.Button("Estate"))
+        {
+            Selection.activeGameObject = script.transform.parent.gameObject;
+        }
+        
+        EditorGUILayout.EndHorizontal();
+
         showBuildingSettings = EditorGUILayout.Foldout(showBuildingSettings, "Building settings");
         if (showBuildingSettings)
         {

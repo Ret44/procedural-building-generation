@@ -6,7 +6,8 @@ public class SettlementData : MonoBehaviour
 {
     [HideInInspector]
     public StyleManager manager;
-
+    [HideInInspector]
+    public bool defaultStyle;
     public string name;
     public Color borderColor;
     public string randomizationSeed;

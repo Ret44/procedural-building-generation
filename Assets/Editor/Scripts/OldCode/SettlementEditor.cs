@@ -16,6 +16,9 @@ namespace Settlement
         private Vector3 tempVal;
         private Vector3 tempPos;
         private bool clearDeveloperConsole;
+        private int styleInd;
+
+        private SettlementBase script;
 
         public void OnSceneGUI()
         {
@@ -104,9 +107,22 @@ namespace Settlement
 
         }
 
-        public override void OnInspectorGUI()
+        public void OnEnable()
         {
-            SettlementBase script = (SettlementBase)target;
+            script = (SettlementBase)target;
+            if (script.data != null)
+            {
+                for (int i = 0; i < script.manager.styleManager.styles.Count; i++)
+                {
+                    if (script.manager.styleManager.styles[i] == script.data)
+                        styleInd = i;
+                }
+            }
+            else
+                styleInd = script.manager.styleManager.styles.Count;
+        }
+        public override void OnInspectorGUI()
+        {            
             string info = "Procedural Building Generation Thesis. \n" +
                           "made by Bartłomiej Sieczka\n" +
                           "Technical University of Lodz, 2016";
@@ -154,6 +170,27 @@ namespace Settlement
                 script.DestroyBuildings();
             }
 
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Style:");
+            string[] styles = script.data.manager.getStyleNames().ToArray();
+            int newStyleInd = EditorGUILayout.Popup(styleInd, styles);
+            if (styleInd != newStyleInd)
+            {
+                if (newStyleInd != script.manager.styleManager.styles.Count)
+                {
+                    script.data = script.manager.styleManager.styles[newStyleInd];
+                }
+                else
+                {
+                    script.data = script.manager.styleManager.defaultStyle;
+                }
+                styleInd = newStyleInd;
+
+                script.DestroyBuildings();
+                script.GenerateBuildings();
+            }
+            EditorGUILayout.EndHorizontal();
             showSettlementSettings = EditorGUILayout.Foldout(showSettlementSettings, "Settlement Settings");
             if (showSettlementSettings)
             {

@@ -22,6 +22,19 @@ public class StyleManager : MonoBehaviour {
         }
     }
 
+    private GenerationManager _generationManager;
+    public GenerationManager generationManager
+    {
+        get
+        {
+            if(_generationManager == null)
+            {
+                _generationManager = GetComponent<GenerationManager>();
+            }
+            return _generationManager;
+        }
+    }
+
     public List<SettlementData> styles;
 
     public StyleManager editorInstance;
@@ -33,6 +46,7 @@ public class StyleManager : MonoBehaviour {
         {
             names.Add(styles[i].name);
         }
+        names.Add(string.Format("Default ({0})", defaultStyle.name));
         return names;
     }
 	private static void instanceCheck()
@@ -43,6 +57,7 @@ public class StyleManager : MonoBehaviour {
 
         }
     }
+
 
     public GameObject cloneStyle(SettlementData style)
     {

@@ -5,21 +5,31 @@ using System.Collections.Generic;
 
 namespace Settlement
 {
+
     [CustomEditor(typeof(GenerationManager))]
     public class GenerationManagerEditor : Editor
     {
-
         public int styleInd = 0;
+
+        private GenerationManager script;
+
+        public void OnEnable()
+        {
+            script = (GenerationManager)target;
+            if (script.defaultStyle != null)
+                script.defaultStyle.defaultStyle = true; //TODO: DO ZMIANY!
+        }
 
         public override void OnInspectorGUI()
         {
-            GenerationManager script = (GenerationManager)target;
             string info = "Procedural Building Generation Thesis. \n" +
                           "made by Bartłomiej Sieczka\n" +
                           "Technical University of Lodz, 2016";
 
             EditorGUILayout.HelpBox(info, MessageType.Info);
             EditorGUILayout.Space();
+
+            DrawDefaultInspector();
 
             if (script.styleManager == null)
                 script.styleManager = script.gameObject.GetComponent<StyleManager>();
@@ -65,7 +75,15 @@ namespace Settlement
                     SceneView.lastActiveSceneView.pivot = newPos;
                     SceneView.lastActiveSceneView.Repaint();
                 }
-                GUILayout.Button("Clone");
+                if(GUILayout.Button("Clone"))
+                {
+                    GameObject cloned = script.cloneSettlement(script.settlements[i]);
+                    Selection.activeGameObject = cloned;
+                    Vector3 newPos = cloned.transform.position;
+                    newPos.z -= 10f;
+                    SceneView.lastActiveSceneView.pivot = newPos;
+                    SceneView.lastActiveSceneView.Repaint();
+                }
                 if(GUILayout.Button("Delete"))
                 {
                     script.deleteSettlement(script.settlements[i]);

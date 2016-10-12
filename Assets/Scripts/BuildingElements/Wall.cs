@@ -16,8 +16,7 @@ namespace Building
         public float foundationHeight;
         public Vector3 startingPoint;
         public Vector3 directionPoint;
-        public SettlementData data;
-        public Random random;          
+        public SettlementData data;      
 
         public void MirrorTris()
         {

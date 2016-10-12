@@ -64,6 +64,7 @@ public class StyleManager : MonoBehaviour {
         GameObject newStyleObj = Instantiate(style.gameObject) as GameObject;
         SettlementData newData = newStyleObj.GetComponent<SettlementData>();
         newData.name = string.Format("{0} [Clone]", newData.name);
+        newData.material = new Material(style.material);
         newStyleObj.transform.parent = this.transform;
 
         styles.Add(newData);
@@ -81,6 +82,8 @@ public class StyleManager : MonoBehaviour {
         SettlementData newData = newStyleObj.AddComponent<SettlementData>();
         newStyleObj.name = newData.name;
         newStyleObj.transform.parent = this.transform;
+        newData.material = new Material(Shader.Find("Custom/Wall"));
+        newData.material.SetTexture(0, Resources.Load("Textures/building-texture") as Texture);
         newData.manager = this;
 
         styles.Add(newData);

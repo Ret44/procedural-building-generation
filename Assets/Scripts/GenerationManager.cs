@@ -31,7 +31,8 @@ namespace Settlement
 
             return newSettlementObj;
         }
-        
+       
+
         public GameObject cloneSettlement(SettlementBase settlement)
         {
             GameObject newSettlementObj = Instantiate(settlement.gameObject, Vector3.zero, Quaternion.identity) as GameObject;

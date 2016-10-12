@@ -20,7 +20,7 @@ public class StyleManagerEditor : Editor {
             script.createNewStyle();
         }
         EditorGUILayout.Space();
-
+   
         if (script.styles != null)
         {
             for (int i = 0; i < script.styles.Count; i++)
